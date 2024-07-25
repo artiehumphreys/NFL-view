@@ -1,5 +1,6 @@
 import React from "react";
 import { useSpring, animated } from "@react-spring/web";
+import styles from "../css/NFLLogo.module.css";
 
 function NFLLogo() {
   const props = useSpring({
@@ -10,10 +11,10 @@ function NFLLogo() {
   return (
     <div className="logo-container">
       <animated.img
-        src="../../public/nfl_logo.jpg"
+        src="/nfl_logo.png"
         style={props}
         alt="NFL Logo"
-        className="logo"
+        className={styles.logo}
       />
     </div>
   );
