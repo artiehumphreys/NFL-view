@@ -4,12 +4,12 @@ import styles from "../css/NFLLogo.module.css";
 
 function NFLLogo() {
   const props = useSpring({
-    from: { transform: "translateY(-100%)" },
-    to: { transform: "translateY(50vh)" },
-    config: { duration: 500 },
+    from: { top: "-50%" },
+    to: { top: "10%" },
+    config: { duration: 1000 },
   });
   return (
-    <div className="logo-container">
+    <div className={styles.logoContainer}>
       <animated.img
         src="/nfl_logo.png"
         style={props}
