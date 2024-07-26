@@ -6,17 +6,19 @@ function NFLLogo() {
   const props = useSpring({
     from: { opacity: 0 },
     to: { opacity: 1 },
-    config: { duration: 1000 },
+    config: { duration: 1500 },
+    delay: 750,
   });
   return (
     <div className={styles.container}>
-      <img
-        src="/nfl_logo.png"
-        style={props}
-        alt="NFL Logo"
-        className={styles.logo}
-      />
+      <img src="/nfl_logo.png" alt="NFL Logo" className={styles.logo} />
       <span className={styles.text}>NFL View</span>
+      <animated.button
+        style={props}
+        className={`${styles.button} bg-blue-500 font-bold text-white py-2 px-4 border border-blue-700 rounded`}
+      >
+        Get Started
+      </animated.button>
     </div>
   );
 }

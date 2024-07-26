@@ -17,5 +17,13 @@
   position: absolute;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   top: 50vh;
-  color: rgb(1, 51, 105);
+}
+
+.button {
+  width: 20vw;
+  height: 10vh;
+  position: absolute;
+  bottom: 20vh;
+  border: none;
+  font-size: 150%;
 }
