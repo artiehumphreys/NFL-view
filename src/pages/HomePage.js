@@ -1,9 +1,22 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import NFLLogo from "../components/NFLLogo";
+import styles from "../css/HomePage.module.css";
 
 function HomePage() {
-  return <NFLLogo></NFLLogo>;
+  return (
+    <>
+      <div className={styles.container}>
+        <div className={styles.videoBackground}>
+          <video autoPlay loop muted className={styles.video}>
+            <source src="/NFL_Kickoff_2022.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <NFLLogo></NFLLogo>
+      </div>
+    </>
+  );
 }
 
 export default HomePage;
