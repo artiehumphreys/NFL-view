@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { useSpring, animated } from "@react-spring/web";
 import styles from "../css/NFLLogo.module.css";
 
@@ -9,6 +10,7 @@ function NFLLogo() {
     config: { duration: 1500 },
     delay: 750,
   });
+  const navigate = useNavigate();
   return (
     <div className={styles.container}>
       <img src="/nfl_logo.png" alt="NFL Logo" className={styles.logo} />
@@ -16,6 +18,7 @@ function NFLLogo() {
       <animated.button
         style={props}
         className={`${styles.button} bg-blue-500 font-bold text-white py-2 px-4 border border-blue-700 rounded`}
+        onClick={() => navigate("/home")}
       >
         Get Started
       </animated.button>
