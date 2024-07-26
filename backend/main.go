@@ -14,6 +14,8 @@ func main() {
 	filePath := "../alpha/NFLview_Database_2024.07.csv"
 	records := pkg.ReadCsvFile(filePath)
 
+	database.PopulateDB(db, records)
+
 	for _, record := range records {
 		fmt.Printf("%+v\n", record)
 	}
