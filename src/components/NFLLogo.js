@@ -8,7 +8,7 @@ function NFLLogo() {
     from: { opacity: 0 },
     to: { opacity: 1 },
     config: { duration: 1500 },
-    delay: 750,
+    delay: 1000,
   });
   const navigate = useNavigate();
   return (
