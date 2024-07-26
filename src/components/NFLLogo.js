@@ -9,13 +9,14 @@ function NFLLogo() {
     config: { duration: 1000 },
   });
   return (
-    <div className={styles.logoContainer}>
+    <div className={styles.container}>
       <img
         src="/nfl_logo.png"
         style={props}
         alt="NFL Logo"
         className={styles.logo}
       />
+      <span className={styles.text}>NFL View</span>
     </div>
   );
 }

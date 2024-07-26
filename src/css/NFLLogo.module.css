@@ -1,4 +1,4 @@
-.logoContainer {
+.container {
   position: relative;
   height: 100vh;
   display: flex;
@@ -10,4 +10,12 @@
   width: 45vw;
   position: absolute;
   top: 0vh;
+}
+
+.text {
+  font-size: 500%;
+  position: absolute;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  top: 50vh;
+  color: rgb(1, 51, 105);
 }
