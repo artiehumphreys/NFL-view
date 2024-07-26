@@ -1,0 +1,29 @@
+.container {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo {
+  width: 45vw;
+  position: absolute;
+  top: 0vh;
+}
+
+.text {
+  font-size: 500%;
+  position: absolute;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  top: 50vh;
+}
+
+.button {
+  width: 20vw;
+  height: 10vh;
+  position: absolute;
+  bottom: 20vh;
+  border: none;
+  font-size: 150%;
+}
