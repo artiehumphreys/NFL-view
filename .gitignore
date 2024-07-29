@@ -1,5 +1,6 @@
 # project-specific
 alpha
+*.db
 
 # dependencies
 /node_modules
