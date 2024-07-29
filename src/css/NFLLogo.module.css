@@ -1,16 +1,18 @@
 .logo {
   width: 20vw;
+  margin-bottom: 1.75vh;
 }
 
 .text {
   font-size: 5vw;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   text-align: center;
+  margin-bottom: 5vh;
 }
 
 .button {
   width: 20vw;
-  height: 10vh;
+  height: 8vh;
   border: none;
   font-size: 1.75vw;
   cursor: pointer;
