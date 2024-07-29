@@ -4,3 +4,7 @@
   height: 100vh;
   overflow: hidden;
 }
+
+.button {
+  z-index: 1000 !important;
+}
