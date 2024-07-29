@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaSearch, FaBars, FaTimes } from "react-icons/fa";
 import styles from "../css/HomePage.module.css";
 
@@ -7,6 +7,15 @@ function HomePage() {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  const [searchTags, setSearchTags] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:8080/home')
+      .then(response => response.json())
+      .then(data => setSearchTags(data))
+      .catch(error => console.error('Error fetching search tags:', error));
+  }, []);
   return (
     <div className={`${styles.container} min-h-screen flex flex-col`}>
       <header className="bg-blue-500 text-white text-center py-4">
@@ -30,21 +39,14 @@ function HomePage() {
             </div>
             <div className="flex gap-2 flex-row items-center mb-4">
               <h2 className="text-xl font-semibold">Search by</h2>
-              <button className="bg-gray-200 text-gray-700 py-1 px-3 rounded">
-                Tag 1
-              </button>
-              <button className="bg-gray-200 text-gray-700 py-1 px-3 rounded">
-                Tag 2
-              </button>
-              <button className="bg-gray-200 text-gray-700 py-1 px-3 rounded">
-                Tag 3
-              </button>
-              <button className="bg-gray-200 text-gray-700 py-1 px-3 rounded">
-                Tag 4
-              </button>
-              <button className="bg-gray-200 text-gray-700 py-1 px-3 rounded">
-                Tag 5
-              </button>
+              {searchTags.map((tag, index) => (
+                  <button
+                    key={index}
+                    className="bg-gray-200 text-gray-700 py-1 px-3 rounded"
+                  >
+                    {tag}
+                  </button>
+                ))}
             </div>
           </section>
         </main>
