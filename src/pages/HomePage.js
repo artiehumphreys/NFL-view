@@ -1,7 +1,12 @@
-import { FaSearch } from "react-icons/fa";
+import React, { useState } from "react";
+import { FaSearch, FaBars, FaTimes } from "react-icons/fa";
 import styles from "../css/HomePage.module.css";
 
 function HomePage() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
   return (
     <div className={`${styles.container} min-h-screen flex flex-col`}>
       <header className="bg-blue-500 text-white text-center py-4">
@@ -43,6 +48,12 @@ function HomePage() {
             </div>
           </section>
         </main>
+        <button
+          className="absolute top-4 right-4 text-blue-500 p-2 rounded"
+          onClick={toggleMenu}
+        >
+          {isMenuOpen ? <FaTimes /> : <FaBars />}
+        </button>
       </div>
     </div>
   );
