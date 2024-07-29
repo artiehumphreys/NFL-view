@@ -1,8 +1,11 @@
 #!/bin/bash
+kill -9 15008
 cd backend
 go mod tidy
 go run main.go &
 
-# Change back to the root directory and start the React frontend
+GO_PID=$!
+
 cd ..
-npm start &
+npm start
+wait $GO_PID
