@@ -12,12 +12,12 @@ function NFLLogo() {
   });
   const navigate = useNavigate();
   return (
-    <div className={styles.container}>
-      <img src="/nfl_logo.png" alt="NFL Logo" className={styles.logo} />
-      <span className={styles.text}>NFL View</span>
+    <div className="flex flex-col justify-start items-center h-screen py-10 mb-5 min-h-screen max-h-screen">
+      <img src="/nfl_logo.png" alt="NFL Logo" className={`${styles.logo}`} />
+      <span className={`${styles.text}`}>NFL View</span>
       <animated.button
         style={props}
-        className={`${styles.button} bg-blue-500 font-bold text-white py-2 px-4 border border-blue-700 rounded`}
+        className={`bg-blue-500 font-bold text-white py-2 px-4 border border-blue-700 rounded ${styles.button}`}
         onClick={() => navigate("/home")}
       >
         Get Started
