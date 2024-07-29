@@ -60,6 +60,23 @@ function HomePage() {
           }`}
         >
           <h2 className="text-2xl font-bold mb-4">Menu</h2>
+          <ul>
+            <li className="mb-2">
+              <a href="#" className="text-blue-500">
+                Profile
+              </a>
+            </li>
+            <li className="mb-2">
+              <a href="#" className="text-blue-500">
+                Settings
+              </a>
+            </li>
+            <li className="mb-2">
+              <a href="#" className="text-blue-500">
+                View Legacy Data
+              </a>
+            </li>
+          </ul>
         </aside>
       </div>
     </div>
