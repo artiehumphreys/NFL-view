@@ -25,5 +25,5 @@ func main() {
 
 	corsHandler := cors.Default().Handler(router)
 
-	http.ListenAndServe(":8080", corsHandler)
+	_ = http.ListenAndServe(":8080", corsHandler)
 }

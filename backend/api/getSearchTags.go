@@ -21,6 +21,6 @@ func GetSearchTagsHandler(db *sql.DB) httprouter.Handle {
 		sort.Strings(searchTags)
 
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(searchTags)
+		_ = json.NewEncoder(w).Encode(searchTags)
 	}
 }

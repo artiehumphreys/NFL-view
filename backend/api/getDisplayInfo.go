@@ -21,6 +21,6 @@ func GetDisplayInfoHandler(db *sql.DB) httprouter.Handle {
 		slices.Sort(displayInfo)
 
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(displayInfo)
+		_ = json.NewEncoder(w).Encode(displayInfo)
 	}
 }
