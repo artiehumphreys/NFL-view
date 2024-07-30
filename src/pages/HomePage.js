@@ -12,21 +12,21 @@ function HomePage() {
   const [displayInfo, setDisplayInfo] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:8080/home/tags')
-      .then(response => response.json())
-      .then(data => {
-        console.log('Fetched search tags:', data); // Debug log
+    fetch("http://localhost:8080/home/tags")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Fetched search tags:", data); // Debug log
         setSearchTags(data);
       })
-      .catch(error => console.error('Error fetching search tags:', error));
+      .catch((error) => console.error("Error fetching search tags:", error));
 
-    fetch('http://localhost:8080/home/info')
-      .then(response => response.json())
-      .then(data => {
-        console.log('Fetched display info:', data);
+    fetch("http://localhost:8080/home/info")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Fetched display info:", data);
         setDisplayInfo(data);
       })
-      .catch(error => console.error('Error fetching display info:', error));
+      .catch((error) => console.error("Error fetching display info:", error));
   }, []);
   return (
     <div className={`${styles.container} min-h-screen flex flex-col`}>
@@ -52,24 +52,24 @@ function HomePage() {
             <div className="flex gap-2 flex-row items-center mb-4">
               <h2 className="text-xl font-semibold">Search by</h2>
               {searchTags.map((tag, index) => (
-                  <button
-                    key={index}
-                    className="bg-gray-200 text-gray-700 py-1 px-3 rounded hover:bg-gray-300"
-                  >
-                    {tag}
-                  </button>
-                ))}
+                <button
+                  key={index}
+                  className="bg-gray-200 text-gray-700 py-1 px-3 rounded hover:bg-gray-300"
+                >
+                  {tag}
+                </button>
+              ))}
             </div>
           </section>
           <ul className="flex gap-2 flex-col align-left mb-4 overflow-scroll">
             {displayInfo.map((info, index) => (
-                  <button
-                    key={index}
-                    className="bg-gray-200 text-gray-700 py-1 px-3 rounded hover:bg-gray-300"
-                  >
-                    {info}
-                  </button>
-                ))}
+              <button
+                key={index}
+                className="bg-gray-200 text-gray-700 py-1 px-3 rounded hover:bg-gray-300"
+              >
+                {info}
+              </button>
+            ))}
           </ul>
         </main>
         <button
