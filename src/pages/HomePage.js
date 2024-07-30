@@ -42,13 +42,16 @@ function HomePage() {
               {searchTags.map((tag, index) => (
                   <button
                     key={index}
-                    className="bg-gray-200 text-gray-700 py-1 px-3 rounded"
+                    className="bg-gray-200 text-gray-700 py-1 px-3 rounded hover:bg-gray-300"
                   >
                     {tag}
                   </button>
                 ))}
             </div>
           </section>
+          <ul className="flex gap-2 flex-col align-left mb-4">
+            <li>hi</li>
+          </ul>
         </main>
         <button
           className={` ${styles.button} button absolute top-4 right-4 text-blue-500 p-2 rounded`}

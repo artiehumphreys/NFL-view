@@ -1,5 +1,6 @@
 #!/bin/bash
-kill -9 15008
+kill $(lsof -t -i:8080)
+kill $(lsof -t -i:3000)
 cd backend
 go mod tidy
 go run main.go &

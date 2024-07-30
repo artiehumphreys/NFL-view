@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"net/http"
+	"sort"
 
 	"github.com/artiehumphreys/NFL-view/database"
 	"github.com/julienschmidt/httprouter"
@@ -16,6 +17,9 @@ func GetSearchTagsHandler(db *sql.DB) httprouter.Handle {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+
+		sort.Strings(searchTags)
+
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(searchTags)
 	}
