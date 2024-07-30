@@ -20,7 +20,8 @@ func main() {
 	database.PopulateDB(db, records)
 
 	router := httprouter.New()
-	router.GET("/home", api.GetSearchTagsHandler(db))
+	router.GET("/home/tags", api.GetSearchTagsHandler(db))
+	router.GET("/home/info", api.GetDisplayInfoHandler(db))
 
 	corsHandler := cors.Default().Handler(router)
 

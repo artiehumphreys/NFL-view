@@ -9,12 +9,18 @@ function HomePage() {
   };
 
   const [searchTags, setSearchTags] = useState([]);
+  const [displayInfo, setDisplayInfo] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:8080/home')
+    fetch('http://localhost:8080/home/tags')
       .then(response => response.json())
       .then(data => setSearchTags(data))
       .catch(error => console.error('Error fetching search tags:', error));
+
+    fetch('http://localhost:8080/home/info')
+      .then(response => response.json())
+      .then(data => setDisplayInfo(data))
+      .catch(error => console.error('Error fetching display info:', error));
   }, []);
   return (
     <div className={`${styles.container} min-h-screen flex flex-col`}>
@@ -50,7 +56,14 @@ function HomePage() {
             </div>
           </section>
           <ul className="flex gap-2 flex-col align-left mb-4">
-            <li>hi</li>
+            {displayInfo.map((tag, index) => (
+                  <button
+                    key={index}
+                    className="bg-gray-200 text-gray-700 py-1 px-3 rounded hover:bg-gray-300"
+                  >
+                    {tag}
+                  </button>
+                ))}
           </ul>
         </main>
         <button

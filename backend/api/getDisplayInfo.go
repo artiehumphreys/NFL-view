@@ -9,15 +9,15 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-func GetDisplayInfo(db *sql.DB) httprouter.Handle {
+func GetDisplayInfoHandler(db *sql.DB) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-		searchTags, err := database.GetSearchTags(db)
+		displayInfo, err := database.GetDisplayInfo(db)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(searchTags)
+		json.NewEncoder(w).Encode(displayInfo)
 	}
 }

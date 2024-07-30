@@ -1,5 +1,7 @@
 package models
 
+import "fmt"
+
 type InjuryDisplay struct {
 	Type         string
 	GamePosition string
@@ -7,4 +9,9 @@ type InjuryDisplay struct {
 	JerseyNumber string
 	FirstName    string
 	LastName     string
+}
+
+func (id InjuryDisplay) String() string {
+	return fmt.Sprintf("%s %s: %s %s #%s %s",
+		id.FirstName, id.LastName, id.Team, id.GamePosition, id.JerseyNumber, id.Type)
 }
