@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"net/http"
+	"slices"
 
 	"github.com/artiehumphreys/NFL-view/database"
 	"github.com/julienschmidt/httprouter"
@@ -16,6 +17,8 @@ func GetDisplayInfoHandler(db *sql.DB) httprouter.Handle {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+
+		slices.Sort(displayInfo)
 
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(displayInfo)

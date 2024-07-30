@@ -14,12 +14,18 @@ function HomePage() {
   useEffect(() => {
     fetch('http://localhost:8080/home/tags')
       .then(response => response.json())
-      .then(data => setSearchTags(data))
+      .then(data => {
+        console.log('Fetched search tags:', data); // Debug log
+        setSearchTags(data);
+      })
       .catch(error => console.error('Error fetching search tags:', error));
 
     fetch('http://localhost:8080/home/info')
       .then(response => response.json())
-      .then(data => setDisplayInfo(data))
+      .then(data => {
+        console.log('Fetched display info:', data);
+        setDisplayInfo(data);
+      })
       .catch(error => console.error('Error fetching display info:', error));
   }, []);
   return (
@@ -27,7 +33,7 @@ function HomePage() {
       <header className="bg-blue-500 text-white text-center py-4">
         <h1 className="text-5xl font-bold">NFL View</h1>
       </header>
-      <div className="flex flex-1 relative">
+      <div className="flex flex-1 relative overflow-hidden">
         <aside className="w-64 bg-gray-100 p-4 absolute left-0 top-0 bottom-0">
           <h2 className="text-2xl font-bold mb-4">Games</h2>
         </aside>
@@ -55,13 +61,13 @@ function HomePage() {
                 ))}
             </div>
           </section>
-          <ul className="flex gap-2 flex-col align-left mb-4">
-            {displayInfo.map((tag, index) => (
+          <ul className="flex gap-2 flex-col align-left mb-4 overflow-scroll">
+            {displayInfo.map((info, index) => (
                   <button
                     key={index}
                     className="bg-gray-200 text-gray-700 py-1 px-3 rounded hover:bg-gray-300"
                   >
-                    {tag}
+                    {info}
                   </button>
                 ))}
           </ul>

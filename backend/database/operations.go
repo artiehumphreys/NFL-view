@@ -35,17 +35,17 @@ func GetDisplayInfo(db *sql.DB) ([]string, error) {
 		return nil, err
 	}
 	defer rows.Close()
-	var info []string
+	var set = models.NewSet()
 	for rows.Next() {
 		var instance models.InjuryDisplay
 		if err := rows.Scan(&instance.Type, &instance.GamePosition, &instance.Team, &instance.JerseyNumber, &instance.FirstName, &instance.LastName); err != nil {
 			return nil, err
 		}
-		info = append(info, instance.String())
+		set.Add(instance.String())
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
 	}
 
-	return info, nil
+	return set.ToSlice(), nil
 }

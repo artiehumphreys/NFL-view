@@ -13,5 +13,5 @@ type InjuryDisplay struct {
 
 func (id InjuryDisplay) String() string {
 	return fmt.Sprintf("%s %s: %s %s #%s %s",
-		id.FirstName, id.LastName, id.Team, id.GamePosition, id.JerseyNumber, id.Type)
+		id.FirstName, id.LastName, id.GamePosition, id.Team, id.JerseyNumber, id.Type)
 }
