@@ -55,25 +55,3 @@ func PopulateDB(db *sql.DB, records []models.Record) {
 		i += 1
 	}
 }
-
-func GetSearchTags(db *sql.DB) ([]string, error) {
-	var query = "SELECT type FROM players"
-	rows, err := db.Query(query)
-	var set = models.NewSet()
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	for rows.Next() {
-		var tag string
-		if err := rows.Scan(&tag); err != nil {
-			return nil, err
-		}
-		set.Add(tag)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-
-	return set.ToSlice(), nil
-}
