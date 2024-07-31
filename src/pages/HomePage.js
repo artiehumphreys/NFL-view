@@ -26,7 +26,7 @@ function HomePage() {
     fetch("http://localhost:8080/home/games")
       .then((response) => response.json())
       .then((data) => setGameInfo(data))
-      .catch((error) => console.error("Error fetching display info:", error));
+      .catch((error) => console.error("Error fetching games:", error));
   }, []);
   return (
     <div className={`${styles.container} min-h-screen flex flex-col`}>

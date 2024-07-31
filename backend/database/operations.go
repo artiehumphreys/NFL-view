@@ -30,7 +30,7 @@ func GetField(db *sql.DB, field string) ([]string, error) {
 }
 
 func GetInjuryInfo(db *sql.DB) ([]string, error) {
-	var query = "SELECT id, type, game_position, team, jersey_number, first_name, last_name FROM players"
+	var query = "SELECT game, type, game_position, team, jersey_number, first_name, last_name FROM players"
 	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err
@@ -52,7 +52,7 @@ func GetInjuryInfo(db *sql.DB) ([]string, error) {
 }
 
 func GetGameInfo(db *sql.DB) ([]string, error) {
-	var query = "SELECT play_id, first_name, last_name FROM players"
+	var query = "SELECT game, play_id, first_name, last_name FROM players"
 	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err
@@ -60,7 +60,7 @@ func GetGameInfo(db *sql.DB) ([]string, error) {
 	var results []string
 	for rows.Next() {
 		var instance models.GameDisplay
-		if err := rows.Scan(&instance.PlayID, &instance.FirstName, &instance.LastName); err != nil {
+		if err := rows.Scan(&instance.Game, &instance.PlayID, &instance.FirstName, &instance.LastName); err != nil {
 			return nil, err
 		}
 		results = append(results, instance.String())

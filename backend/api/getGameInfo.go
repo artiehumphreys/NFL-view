@@ -12,15 +12,15 @@ import (
 
 func GetGameInfoHandler(db *sql.DB) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-		searchTags, err := database.GetField(db, "game")
+		gameInfo, err := database.GetGameInfo(db)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
-		sort.Strings(searchTags)
+		sort.Strings(gameInfo)
 
 		w.Header().Set("Content-Type", "application/json")
-		_ = json.NewEncoder(w).Encode(searchTags)
+		_ = json.NewEncoder(w).Encode(gameInfo)
 	}
 }
