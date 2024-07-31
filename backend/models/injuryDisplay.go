@@ -3,6 +3,7 @@ package models
 import "fmt"
 
 type InjuryDisplay struct {
+	Game		 string
 	Type         string
 	GamePosition string
 	Team         string
@@ -12,6 +13,6 @@ type InjuryDisplay struct {
 }
 
 func (id InjuryDisplay) String() string {
-	return fmt.Sprintf("%s %s: %s %s #%s %s",
-		id.FirstName, id.LastName, id.GamePosition, id.Team, id.JerseyNumber, id.Type)
+	return fmt.Sprintf("%s %s %s: %s %s #%s %s",
+		id.Game, id.FirstName, id.LastName, id.GamePosition, id.Team, id.JerseyNumber, id.Type)
 }

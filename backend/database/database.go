@@ -25,7 +25,8 @@ func InitDB(filepath string) *sql.DB {
 		"jersey_number" TEXT,
 		"first_name" TEXT,
 		"last_name" TEXT,
-		"quality" TEXT
+		"quality" TEXT,
+		UNIQUE (id, play_id, nfl_player_id)
 	);`
 
 	_, err = db.Exec(createTableSQL)
@@ -43,7 +44,7 @@ func PopulateDB(db *sql.DB, records []models.Record) {
 			break
 		}
 		record := records[i]
-		preparedInsertRecord := `INSERT INTO players(id, play_id, nfl_player_id, type, game_position, team, jersey_number, first_name, last_name, quality) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+		preparedInsertRecord := `INSERT OR IGNORE INTO players (id, play_id, nfl_player_id, type, game_position, team, jersey_number, first_name, last_name, quality) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
 		statement, err := db.Prepare(preparedInsertRecord)
 		if err != nil {
 			log.Fatal(err)

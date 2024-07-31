@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/artiehumphreys/NFL-view/api"
@@ -25,5 +26,6 @@ func main() {
 
 	corsHandler := cors.Default().Handler(router)
 
+	fmt.Println("Listening...")
 	_ = http.ListenAndServe(":8080", corsHandler)
 }
