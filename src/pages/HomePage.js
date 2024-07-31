@@ -64,7 +64,7 @@ function HomePage() {
                     }`}
                     onClick={() =>
                       visibleGameIndex === index
-                        ? navigate(`games/${game.game}`)
+                        ? navigate(`/games/${game.game}`)
                         : ""
                     }
                   >
