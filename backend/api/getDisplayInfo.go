@@ -12,7 +12,7 @@ import (
 
 func GetDisplayInfoHandler(db *sql.DB) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-		displayInfo, err := database.GetDisplayInfo(db)
+		displayInfo, err := database.GetInjuryInfo(db)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
