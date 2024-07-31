@@ -2,9 +2,13 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 
 	"github.com/artiehumphreys/NFL-view/database"
 	"github.com/artiehumphreys/NFL-view/pkg"
+	"github.com/artiehumphreys/NFL-view/route"
+	"github.com/julienschmidt/httprouter"
+	"github.com/rs/cors"
 )
 
 func main() {
@@ -16,7 +20,12 @@ func main() {
 
 	database.PopulateDB(db, records)
 
-	for _, record := range records {
-		fmt.Printf("%+v\n", record)
-	}
+	router := httprouter.New()
+
+	route.RegisterRoutes(router, db)
+
+	corsHandler := cors.Default().Handler(router)
+
+	fmt.Println("Listening...")
+	_ = http.ListenAndServe(":8080", corsHandler)
 }
