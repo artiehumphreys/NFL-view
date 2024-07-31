@@ -14,7 +14,7 @@ func InitDB(filepath string) *sql.DB {
 		log.Fatal(err)
 	}
 
-	createTableSQL := `CREATE TABLE IF NOT EXISTS players (
+	createTableSQL := `CREATE TABLE IF NOT EXISTS injuries (
 		auto_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 		"game" INTEGER,
 		"play_id" INTEGER,
@@ -44,7 +44,7 @@ func PopulateDB(db *sql.DB, records []models.Record) {
 			break
 		}
 		record := records[i]
-		preparedInsertRecord := `INSERT OR IGNORE INTO players (game, play_id, nfl_player_id, type, game_position, team, jersey_number, first_name, last_name, quality) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+		preparedInsertRecord := `INSERT OR IGNORE INTO injuries (game, play_id, nfl_player_id, type, game_position, team, jersey_number, first_name, last_name, quality) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
 		statement, err := db.Prepare(preparedInsertRecord)
 		if err != nil {
 			log.Fatal(err)

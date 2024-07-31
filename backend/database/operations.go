@@ -8,7 +8,7 @@ import (
 )
 
 func GetField(db *sql.DB, field string) ([]string, error) {
-	var query = fmt.Sprintf("SELECT %s FROM players", field)
+	var query = fmt.Sprintf("SELECT %s FROM injuries", field)
 	rows, err := db.Query(query)
 	var set = models.NewSet()
 	if err != nil {
@@ -30,7 +30,7 @@ func GetField(db *sql.DB, field string) ([]string, error) {
 }
 
 func GetInjuryInfo(db *sql.DB) ([]string, error) {
-	var query = "SELECT game, type, game_position, team, jersey_number, first_name, last_name FROM players"
+	var query = "SELECT game, type, game_position, team, jersey_number, first_name, last_name FROM injuries"
 	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err
@@ -52,7 +52,7 @@ func GetInjuryInfo(db *sql.DB) ([]string, error) {
 }
 
 func GetGameInfo(db *sql.DB) (map[string][]string, error) {
-	var query = "SELECT game, play_id, team, first_name, last_name FROM players"
+	var query = "SELECT game, play_id, team, first_name, last_name FROM injuries"
 	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err
