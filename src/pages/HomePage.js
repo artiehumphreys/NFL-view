@@ -10,6 +10,7 @@ function HomePage() {
 
   const [searchTags, setSearchTags] = useState([]);
   const [displayInfo, setDisplayInfo] = useState([]);
+  const [gameInfo, setGameInfo] = useState([]);
 
   useEffect(() => {
     fetch("http://localhost:8080/home/tags")
@@ -21,6 +22,11 @@ function HomePage() {
       .then((response) => response.json())
       .then((data) => setDisplayInfo(data))
       .catch((error) => console.error("Error fetching display info:", error));
+
+    fetch("http://localhost:8080/home/games")
+      .then((response) => response.json())
+      .then((data) => setGameInfo(data))
+      .catch((error) => console.error("Error fetching display info:", error));
   }, []);
   return (
     <div className={`${styles.container} min-h-screen flex flex-col`}>
@@ -28,8 +34,22 @@ function HomePage() {
         <h1 className="text-5xl font-bold">NFL View</h1>
       </header>
       <div className="flex flex-1 relative overflow-auto">
-        <aside className="w-64 bg-gray-100 p-4 absolute left-0 top-0 bottom-0">
-          <h2 className="text-2xl font-bold mb-4">Games</h2>
+        <aside className="w-64 bg-gray-100 p-4 absolute left-0 top-0 bottom-0 flex flex-col">
+          <div className="flex-shrink-0 mb-4">
+            <h2 className="text-2xl font-bold">Games</h2>
+          </div>
+          <div className="flex-1 overflow-auto">
+            <ul className="flex flex-col gap-2">
+              {gameInfo.map((info, index) => (
+                <button
+                  key={index}
+                  className="bg-gray-200 text-gray-700 py-1 px-3 rounded hover:bg-gray-300"
+                >
+                  {info}
+                </button>
+              ))}
+            </ul>
+          </div>
         </aside>
         <main className="flex-1 p-6 flex flex-col items-center">
           <section className="flex flex-col my-1 w-max max-h-full">
