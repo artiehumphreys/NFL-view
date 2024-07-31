@@ -79,7 +79,7 @@ function HomePage() {
                 </button>
               ))}
             </div>
-            <ul className="flex gap-2 flex-col align-left mb-4 overflow-scroll">
+            <ul className="flex gap-2 flex-col align-left pb-2 overflow-scroll">
               {displayInfo.map((info, index) => (
                 <button
                   key={index}
@@ -122,6 +122,17 @@ function HomePage() {
           </ul>
         </aside>
       </div>
+      <footer class="bg-blue-500">
+        <div class="w-full mx-auto max-w-screen p-3 flex items-center justify-center">
+          <span class="text-sm text-white text-center">
+            © 2024<span class="text-sm text-white"> </span>
+            <a href="https://biocorellc.com/" class="hover:underline">
+              Biomechanics Consulting & Research, LLC
+            </a>
+            . All Rights Reserved.
+          </span>
+        </div>
+      </footer>
     </div>
   );
 }
