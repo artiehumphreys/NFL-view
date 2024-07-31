@@ -51,12 +51,15 @@ func GetInjuryInfo(db *sql.DB) ([]string, error) {
 }
 
 func GetGameInfo(db *sql.DB) ([]string, error) {
-	var query = "SELECT id, first_name, last_name FROM players"
+	var query = "SELECT play_id, first_name, last_name FROM players"
 	rows, err := db.Query(query)
+	if err != nil {
+		return nil, err
+	}
 	var results []string
 	for rows.Next() {
-		var instance models.InjuryDisplay
-		if err := rows.Scan(&instance.Game, &instance.Type, &instance.GamePosition, &instance.Team, &instance.JerseyNumber, &instance.FirstName, &instance.LastName); err != nil {
+		var instance models.GameDisplay
+		if err := rows.Scan(&instance.PlayID, &instance.FirstName, &instance.LastName); err != nil {
 			return nil, err
 		}
 		results = append(results, instance.String())
@@ -64,4 +67,6 @@ func GetGameInfo(db *sql.DB) ([]string, error) {
 	if err := rows.Err(); err != nil {
 		return nil, err
 	}
+
+	return results, nil
 }
