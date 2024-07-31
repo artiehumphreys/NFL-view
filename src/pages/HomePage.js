@@ -18,17 +18,17 @@ function HomePage() {
   const [gameInfo, setGameInfo] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:8080/home/tags")
+    fetch("http://localhost:8080/tags")
       .then((response) => response.json())
       .then((data) => setSearchTags(data))
       .catch((error) => console.error("Error fetching search tags:", error));
 
-    fetch("http://localhost:8080/home/info")
+    fetch("http://localhost:8080/info")
       .then((response) => response.json())
       .then((data) => setDisplayInfo(data))
       .catch((error) => console.error("Error fetching display info:", error));
 
-    fetch("http://localhost:8080/home/games")
+    fetch("http://localhost:8080/games")
       .then((response) => response.json())
       .then((data) => setGameInfo(data))
       .catch((error) => console.error("Error fetching games:", error));
