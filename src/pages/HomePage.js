@@ -34,17 +34,22 @@ function HomePage() {
         <h1 className="text-5xl font-bold">NFL View</h1>
       </header>
       <div className="flex flex-1 relative overflow-auto">
-        <aside className="w-64 bg-gray-100 p-4 absolute left-0 top-0 bottom-0 flex flex-col">
+        <aside className="w-64 bg-gray-100 px-3 py-4 absolute left-0 top-0 bottom-0 flex flex-col w-max">
           <div className="flex-shrink-0 mb-4">
             <h2 className="text-2xl font-bold">Games</h2>
           </div>
           <div className="flex-1 overflow-auto">
             {gameInfo.map((game, index) => (
               <div key={index}>
-                <h2>{game.game}</h2>
-                <ul>
+                <h2 className="font-semibold">{game.game}</h2>
+                <ul className="gap-2 py-2 flex flex-col text-left">
                   {game.events.map((event, idx) => (
-                    <li key={idx}>{event}</li>
+                    <button
+                      key={idx}
+                      className="bg-gray-200 text-gray-700 py-2 px-3 my-1 rounded hover:bg-gray-300 text-left"
+                    >
+                      {event}
+                    </button>
                   ))}
                 </ul>
               </div>
@@ -78,7 +83,7 @@ function HomePage() {
               {displayInfo.map((info, index) => (
                 <button
                   key={index}
-                  className="bg-gray-200 text-gray-700 py-1 px-3 rounded hover:bg-gray-300"
+                  className="bg-gray-200 text-gray-700 py-2 px-3 rounded hover:bg-gray-300"
                 >
                   {info}
                 </button>
