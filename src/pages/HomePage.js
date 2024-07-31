@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { FaSearch, FaBars, FaTimes } from "react-icons/fa";
 import styles from "../css/HomePage.module.css";
+import { useNavigate } from "react-router-dom";
 
 function HomePage() {
+  const navigate = useNavigate();
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -49,14 +52,25 @@ function HomePage() {
               <div key={index} className="mb-4">
                 <div
                   onClick={() => toggleVisibility(index)}
-                  className={`flex gap-2 items-center font-medium py-2 px-1 rounded-lg border-gray-200 hover:bg-gray-50 focus:bg-gray-50 cursor-pointer w-full ${
-                    visibleGameIndex === index
-                      ? "hover:underline decoration-black"
-                      : ""
-                  }`}
+                  className={
+                    "flex gap-2 items-center font-medium text-lg py-2 px-1 rounded-lg border-gray-200 hover:bg-gray-50 focus:bg-gray-50 cursor-pointer w-full"
+                  }
                 >
-                  <span>{game.game}</span>
-                  <span className="font-normal">({game.events.length})</span>
+                  <div
+                    className={`gap-2 flex ${
+                      visibleGameIndex === index
+                        ? "hover:underline decoration-black"
+                        : ""
+                    }`}
+                    onClick={() =>
+                      visibleGameIndex === index
+                        ? navigate(`games/${game.game}`)
+                        : ""
+                    }
+                  >
+                    <span>{game.game}</span>
+                    <span className="font-normal">({game.events.length})</span>
+                  </div>
                   <svg
                     className={`hs-dropdown-open:rotate-180 ml-auto ${
                       visibleGameIndex === index ? "rotate-180" : ""
