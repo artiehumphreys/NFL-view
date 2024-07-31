@@ -45,12 +45,16 @@ function HomePage() {
           </div>
           <div className="flex-1 overflow-auto">
             {gameInfo.map((game, index) => (
+              // https://preline.co/docs/dropdown.html
               <div key={index}>
                 <h2
                   onClick={() => toggleVisibility(index)}
                   className="font-medium hs-dropdown-toggle py-2 px-1 inline-flex items-center gap-x-2 font-large rounded-lg border-gray-200 hover:bg-gray-50 focus:bg-gray-50 cursor-pointer w-full"
                 >
                   {game.game}
+                  <h2 className="font-normal hs-dropdown-toggle inline-flex items-center gap-x-2 font-large rounded-lg border-gray-200 hover:bg-gray-50 focus:bg-gray-50 cursor-pointer w-full">
+                    ({game.events.length})
+                  </h2>
                   <svg
                     className={`hs-dropdown-open:rotate-180 size-4 ${
                       visibleGameIndex === index ? "rotate-180" : ""
