@@ -2,12 +2,13 @@ package database
 
 import (
 	"database/sql"
+	"fmt"
 
 	"github.com/artiehumphreys/NFL-view/models"
 )
 
-func GetSearchTags(db *sql.DB) ([]string, error) {
-	var query = "SELECT type FROM players"
+func GetField(db *sql.DB, field string) ([]string, error) {
+	var query = fmt.Sprintf("SELECT %s FROM players", field)
 	rows, err := db.Query(query)
 	var set = models.NewSet()
 	if err != nil {
@@ -15,11 +16,11 @@ func GetSearchTags(db *sql.DB) ([]string, error) {
 	}
 	defer rows.Close()
 	for rows.Next() {
-		var tag string
-		if err := rows.Scan(&tag); err != nil {
+		var instance string
+		if err := rows.Scan(&instance); err != nil {
 			return nil, err
 		}
-		set.Add(tag)
+		set.Add(instance)
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err

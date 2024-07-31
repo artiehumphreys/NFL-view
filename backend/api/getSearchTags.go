@@ -12,7 +12,7 @@ import (
 
 func GetSearchTagsHandler(db *sql.DB) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-		searchTags, err := database.GetSearchTags(db)
+		searchTags, err := database.GetField(db, "type")
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

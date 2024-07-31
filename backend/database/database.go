@@ -16,7 +16,7 @@ func InitDB(filepath string) *sql.DB {
 
 	createTableSQL := `CREATE TABLE IF NOT EXISTS players (
 		auto_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-		"id" INTEGER,
+		"game" INTEGER,
 		"play_id" INTEGER,
 		"nfl_player_id" INTEGER,
 		"type" TEXT,

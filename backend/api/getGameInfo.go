@@ -12,7 +12,7 @@ import (
 
 func GetGameInfoHandler(db *sql.DB) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-		searchTags, err := database.GetGameInfo(db)
+		searchTags, err := database.GetField(db, "game")
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
