@@ -23,6 +23,7 @@ func main() {
 	router := httprouter.New()
 	router.GET("/home/tags", api.GetSearchTagsHandler(db))
 	router.GET("/home/info", api.GetDisplayInfoHandler(db))
+	router.GET("/home/games", api.GetGameInfoHandler(db))
 
 	corsHandler := cors.Default().Handler(router)
 
