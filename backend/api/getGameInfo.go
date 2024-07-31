@@ -18,9 +18,27 @@ func GetGameInfoHandler(db *sql.DB) httprouter.Handle {
 			return
 		}
 
-		sort.Strings(gameInfo)
+		keys := make([]string, 0, len(gameInfo))
+		for k := range gameInfo {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+
+		sorted := make([]GameInfo, 0, len(keys))
+
+		for _, k := range keys {
+			sorted = append(sorted, GameInfo{
+				Game:   k,
+				Events: gameInfo[k],
+			})
+		}
 
 		w.Header().Set("Content-Type", "application/json")
-		_ = json.NewEncoder(w).Encode(gameInfo)
+		_ = json.NewEncoder(w).Encode(sorted)
 	}
+}
+
+type GameInfo struct {
+	Game   string   `json:"game"`
+	Events []string `json:"events"`
 }

@@ -51,19 +51,19 @@ func GetInjuryInfo(db *sql.DB) ([]string, error) {
 	return results, nil
 }
 
-func GetGameInfo(db *sql.DB) ([]string, error) {
+func GetGameInfo(db *sql.DB) (map[string][]string, error) {
 	var query = "SELECT game, play_id, first_name, last_name FROM players"
 	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err
 	}
-	var results []string
+	results := make(map[string][]string)
 	for rows.Next() {
 		var instance models.GameDisplay
 		if err := rows.Scan(&instance.Game, &instance.PlayID, &instance.FirstName, &instance.LastName); err != nil {
 			return nil, err
 		}
-		results = append(results, instance.String())
+		results[instance.Game] = append(results[instance.Game], instance.String())
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err

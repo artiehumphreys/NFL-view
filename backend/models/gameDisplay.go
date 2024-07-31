@@ -10,6 +10,6 @@ type GameDisplay struct {
 }
 
 func (id GameDisplay) String() string {
-	return fmt.Sprintf("%s %s %s %s",
-		id.Game, id.PlayID, id.FirstName, id.LastName)
+	return fmt.Sprintf("%s %s %s",
+		id.PlayID, id.FirstName, id.LastName)
 }

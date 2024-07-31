@@ -39,16 +39,16 @@ function HomePage() {
             <h2 className="text-2xl font-bold">Games</h2>
           </div>
           <div className="flex-1 overflow-auto">
-            <ul className="flex flex-col gap-2">
-              {gameInfo.map((info, index) => (
-                <button
-                  key={index}
-                  className="bg-gray-200 text-gray-700 py-1 px-3 rounded hover:bg-gray-300"
-                >
-                  {info}
-                </button>
-              ))}
-            </ul>
+            {gameInfo.map((game, index) => (
+              <div key={index}>
+                <h2>{game.game}</h2>
+                <ul>
+                  {game.events.map((event, idx) => (
+                    <li key={idx}>{event}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </aside>
         <main className="flex-1 p-6 flex flex-col items-center">
