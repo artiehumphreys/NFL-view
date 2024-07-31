@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/artiehumphreys/NFL-view/api"
 	"github.com/artiehumphreys/NFL-view/database"
 	"github.com/artiehumphreys/NFL-view/pkg"
+	"github.com/artiehumphreys/NFL-view/route"
 	"github.com/julienschmidt/httprouter"
 	"github.com/rs/cors"
 )
@@ -21,9 +21,8 @@ func main() {
 	database.PopulateDB(db, records)
 
 	router := httprouter.New()
-	router.GET("/home/tags", api.GetSearchTagsHandler(db))
-	router.GET("/home/info", api.GetDisplayInfoHandler(db))
-	router.GET("/home/games", api.GetGameInfoHandler(db))
+
+	route.RegisterRoutes(router, db)
 
 	corsHandler := cors.Default().Handler(router)
 
