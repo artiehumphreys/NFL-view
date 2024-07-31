@@ -46,17 +46,19 @@ function HomePage() {
           <div className="flex-1 overflow-auto">
             {gameInfo.map((game, index) => (
               // https://preline.co/docs/dropdown.html
-              <div key={index}>
-                <h2
+              <div key={index} className="mb-4">
+                <div
                   onClick={() => toggleVisibility(index)}
-                  className="font-medium hs-dropdown-toggle py-2 px-1 inline-flex items-center gap-x-2 font-large rounded-lg border-gray-200 hover:bg-gray-50 focus:bg-gray-50 cursor-pointer w-full"
+                  className={`flex gap-2 items-center font-medium py-2 px-1 rounded-lg border-gray-200 hover:bg-gray-50 focus:bg-gray-50 cursor-pointer w-full ${
+                    visibleGameIndex === index
+                      ? "hover:underline decoration-black"
+                      : ""
+                  }`}
                 >
-                  {game.game}
-                  <h2 className="font-normal hs-dropdown-toggle inline-flex items-center gap-x-2 font-large rounded-lg border-gray-200 hover:bg-gray-50 focus:bg-gray-50 cursor-pointer w-full">
-                    ({game.events.length})
-                  </h2>
+                  <span>{game.game}</span>
+                  <span className="font-normal">({game.events.length})</span>
                   <svg
-                    className={`hs-dropdown-open:rotate-180 size-4 ${
+                    className={`hs-dropdown-open:rotate-180 ml-auto ${
                       visibleGameIndex === index ? "rotate-180" : ""
                     }`}
                     xmlns="http://www.w3.org/2000/svg"
@@ -71,7 +73,7 @@ function HomePage() {
                   >
                     <path d="m6 9 6 6 6-6" />
                   </svg>
-                </h2>
+                </div>
                 {visibleGameIndex === index && (
                   <ul className="gap-2 py-2 flex flex-col text-left">
                     {game.events.map((event, idx) => (
