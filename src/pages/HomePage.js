@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaSearch, FaBars, FaTimes } from "react-icons/fa";
+import { IoMdArrowRoundBack } from "react-icons/io";
 import styles from "../css/HomePage.module.css";
 import { useNavigate } from "react-router-dom";
 
@@ -38,8 +39,14 @@ function HomePage() {
   }, []);
   return (
     <div className={`${styles.container} min-h-screen flex flex-col`}>
-      <header className="bg-blue-500 text-white text-center py-4">
-        <h1 className="text-5xl font-bold">NFL View</h1>
+      <header className="bg-blue-500 text-white text-center py-4 items-center flex justify-between">
+        <IoMdArrowRoundBack
+          size={40}
+          className="ml-2 cursor-pointer"
+          onClick={() => navigate("/")}
+        ></IoMdArrowRoundBack>
+        <h1 className="text-5xl font-bold flex-grow text-center">NFL View</h1>
+        <div className="w-10"></div>
       </header>
       <div className="flex flex-1 relative overflow-auto">
         <aside className="w-64 bg-gray-100 px-3 py-4 absolute left-0 top-0 bottom-0 flex flex-col flex-1">
