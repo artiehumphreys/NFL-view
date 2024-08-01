@@ -15,9 +15,9 @@ function GamePage() {
   }, [game_id]);
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="max-h-screen flex flex-col">
       <Header path="/home"></Header>
-      <div className="flex flex-1 relative overflow-auto justify-center pt-4">
+      <div className="flex flex-1 relative justify-center pt-4 overflow-auto mb-4">
         <div className="w-full max-w-4xl">
           <h1 className="text-center font-medium text-4xl mb-6">
             Game {game_id}
