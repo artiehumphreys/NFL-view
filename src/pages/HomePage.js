@@ -22,8 +22,7 @@ function HomePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentEvent, setCurrentEvent] = useState(null);
 
-  const toggleModal = (info = null) => {
-    setCurrentEvent(info);
+  const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
 
@@ -48,10 +47,26 @@ function HomePage() {
       .catch((error) => console.error("Error fetching games:", error));
   }, []);
 
+  const deleteInjury = async (id) => {
+    console.log(id);
+    const response = await fetch(`http://localhost:8080/removeInjury/${id}`, {
+      method: "DELETE",
+    });
+    if (response.ok) {
+      navigate("/home");
+    } else {
+      console.error("Failed to remove item");
+    }
+  };
+
   return (
     <div className={`${styles.container} min-h-screen flex flex-col`}>
       <Header path="/"></Header>
-      <Modal isOpen={isModalOpen} onClose={() => toggleModal(null)} />
+      <Modal
+        isOpen={isModalOpen}
+        onClose={toggleModal}
+        onDelete={() => deleteInjury(currentEvent.PlayID)}
+      />
       <div className="flex flex-1 relative overflow-auto">
         <aside className="w-64 bg-gray-100 px-3 py-4 absolute left-0 top-0 bottom-0 flex flex-col flex-1">
           <div className="flex-shrink-0 mb-4">
@@ -141,14 +156,19 @@ function HomePage() {
               {displayInfo.map((info, index) => (
                 <button
                   key={index}
-                  onClick={() => setCurrentEvent(info)}
+                  onClick={() => {
+                    setCurrentEvent(info);
+                  }}
                   className="flex bg-gray-200 text-gray-700 py-2 px-3 rounded hover:bg-gray-300 justify-between items-center"
                 >
-                  <div className="w-10"></div>
-                  {info}, {currentEvent}
+                  <div className="flex-grow text-center">
+                    {info.FirstName} {info.LastName} - {info.GamePosition} -{" "}
+                    {info.Team} - #{info.JerseyNumber} - {info.Type}
+                  </div>
                   <FaTrash
                     className="ml-2 cursor-pointer"
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.stopPropagation();
                       toggleModal();
                     }}
                   />

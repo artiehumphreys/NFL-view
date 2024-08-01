@@ -10,6 +10,7 @@ type InjuryDisplay struct {
 	JerseyNumber string
 	FirstName    string
 	LastName     string
+	PlayID       string
 }
 
 func (id InjuryDisplay) String() string {

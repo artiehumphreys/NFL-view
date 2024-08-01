@@ -29,20 +29,21 @@ func GetField(db *sql.DB, field string) ([]string, error) {
 	return set.ToSlice(), nil
 }
 
-func GetInjuryInfo(db *sql.DB) ([]string, error) {
-	var query = "SELECT game, type, game_position, team, jersey_number, first_name, last_name FROM injuries"
+func GetInjuryInfo(db *sql.DB) ([]models.InjuryDisplay, error) {
+	var query = "SELECT game, play_id, type, game_position, team, jersey_number, first_name, last_name FROM injuries"
 	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var results []string
+
+	var results []models.InjuryDisplay
 	for rows.Next() {
 		var instance models.InjuryDisplay
-		if err := rows.Scan(&instance.Game, &instance.Type, &instance.GamePosition, &instance.Team, &instance.JerseyNumber, &instance.FirstName, &instance.LastName); err != nil {
+		if err := rows.Scan(&instance.Game, &instance.PlayID, &instance.Type, &instance.GamePosition, &instance.Team, &instance.JerseyNumber, &instance.FirstName, &instance.LastName); err != nil {
 			return nil, err
 		}
-		results = append(results, instance.String())
+		results = append(results, instance)
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
@@ -72,14 +73,27 @@ func GetGameInfo(db *sql.DB) (map[string][]string, error) {
 	return results, nil
 }
 
-func RemoveInjury(db *sql.DB, id string) error {
-	stmt, err := db.Prepare("DELETE FROM players WHERE id = ?")
+func RemoveInjury(db *sql.DB, items []string) error {
+	if len(items) != 6 {
+		return fmt.Errorf("expected 6 items, got %d", len(items))
+	}
+	query := `
+		DELETE FROM players 
+		WHERE game = ? 
+		AND play_id = ?
+		AND first_name = ? 
+		AND last_name = ? 
+		AND game_position = ? 
+		AND team = ? 
+		AND type = ?`
+
+	stmt, err := db.Prepare(query)
 	if err != nil {
 		return err
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(id)
+	_, err = stmt.Exec(items[0], items[1], items[2], items[3], items[4], items[5])
 	if err != nil {
 		return err
 	}
