@@ -72,6 +72,16 @@ func GetGameInfo(db *sql.DB) (map[string][]string, error) {
 	return results, nil
 }
 
-func RemoveInjury(db *sql.DB, id string) {
+func RemoveInjury(db *sql.DB, id string) error {
+	stmt, err := db.Prepare("DELETE FROM players WHERE id = ?")
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
 
+	_, err = stmt.Exec(id)
+	if err != nil {
+		return err
+	}
+	return nil
 }
