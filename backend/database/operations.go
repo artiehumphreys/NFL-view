@@ -52,7 +52,7 @@ func GetInjuryInfo(db *sql.DB) ([]models.InjuryDisplay, error) {
 	return results, nil
 }
 
-func GetGameInfo(db *sql.DB) (map[string][]string, error) {
+func GetGamesList(db *sql.DB) (map[string][]string, error) {
 	var query = "SELECT game, play_id, team, first_name, last_name FROM injuries"
 	rows, err := db.Query(query)
 	if err != nil {

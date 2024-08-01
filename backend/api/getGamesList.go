@@ -10,9 +10,9 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-func GetGameInfoHandler(db *sql.DB) httprouter.Handle {
+func GetGamesListHandler(db *sql.DB) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-		gameInfo, err := database.GetGameInfo(db)
+		gameInfo, err := database.GetGamesList(db)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

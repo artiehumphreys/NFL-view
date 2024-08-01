@@ -10,6 +10,7 @@ import (
 func RegisterRoutes(router *httprouter.Router, db *sql.DB) {
 	router.GET("/tags", api.GetSearchTagsHandler(db))
 	router.GET("/info", api.GetDisplayInfoHandler(db))
-	router.GET("/games", api.GetGameInfoHandler(db))
+	router.GET("/games", api.GetGamesListHandler(db))
+	router.GET("/game", api.GetGameInfoHandler(db))
 	router.DELETE("/removeInjury", api.RemoveInjuryHandler(db))
 }
