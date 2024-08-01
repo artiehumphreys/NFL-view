@@ -18,6 +18,6 @@ func RemoveInjuryHandler(db *sql.DB) httprouter.Handle {
 		}
 
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("Item successfully deleted"))
+		_, _ = w.Write([]byte("Item successfully deleted"))
 	}
 }
