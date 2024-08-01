@@ -1,13 +1,13 @@
 function Footer() {
   return (
-    <footer class="bg-blue-500">
-      <div class="w-full mx-auto max-w-screen p-3 flex items-center justify-center">
-        <span class="text-sm text-white text-center">
-          © 2024<span class="text-sm text-white"> </span>
+    <footer className="bg-blue-500">
+      <div className="w-full mx-auto max-w-screen p-3 flex items-center justify-center">
+        <span className="text-sm text-white text-center">
+          © 2024<span className="text-sm text-white"> </span>
           <a
             href="https://biocorellc.com/"
             target="_blank"
-            class="hover:underline"
+            className="hover:underline"
           >
             Biomechanics Consulting & Research, LLC
           </a>
