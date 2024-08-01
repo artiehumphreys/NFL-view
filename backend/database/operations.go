@@ -71,3 +71,7 @@ func GetGameInfo(db *sql.DB) (map[string][]string, error) {
 
 	return results, nil
 }
+
+func RemoveInjury(db *sql.DB, id string) {
+
+}
