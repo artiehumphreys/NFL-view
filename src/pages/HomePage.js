@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "../components/Header.js";
 import Footer from "../components/Footer.js";
 import Modal from "../components/Modal.js";
+import Success from "../components/Success.js";
 
 function HomePage() {
   const navigate = useNavigate();
@@ -24,6 +25,11 @@ function HomePage() {
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
+  };
+
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
+  const toggleSuccess = () => {
+    setIsSuccessOpen(!isSuccessOpen);
   };
 
   const [searchTags, setSearchTags] = useState([]);
@@ -47,6 +53,13 @@ function HomePage() {
       .catch((error) => console.error("Error fetching games:", error));
   }, []);
 
+  useEffect(() => {
+    if (localStorage.getItem("deleteSuccess") === "true") {
+      toggleSuccess();
+      localStorage.removeItem("deleteSuccess");
+    }
+  }, []);
+
   const deleteInjury = async (play_id, game, fName, lName, type) => {
     const response = await fetch(
       `http://localhost:8080/removeInjury?game=${game}&play_id=${play_id}&fName=${fName}&lName=${lName}&type=${type}`,
@@ -55,6 +68,7 @@ function HomePage() {
       }
     );
     if (response.ok) {
+      localStorage.setItem("deleteSuccess", "true");
       window.location.reload();
     } else {
       console.error(`Failed to remove item ${response.url}`);
@@ -77,6 +91,11 @@ function HomePage() {
           )
         }
       />
+      <Success
+        isOpen={isSuccessOpen}
+        onChange={toggleModal}
+        message="Entry successfully removed."
+      ></Success>
       <div className="flex flex-1 relative overflow-auto">
         <aside className="w-64 bg-gray-100 px-3 py-4 absolute left-0 top-0 bottom-0 flex flex-col flex-1">
           <div className="flex-shrink-0 mb-4">
