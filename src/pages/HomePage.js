@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaSearch, FaBars, FaTimes } from "react-icons/fa";
+import { FaSearch, FaBars, FaTimes, FaTrash } from "react-icons/fa";
 import styles from "../css/HomePage.module.css";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header.js";
@@ -127,13 +127,15 @@ function HomePage() {
                 </button>
               ))}
             </div>
-            <ul className="flex gap-2 flex-col align-left pb-2 overflow-scroll">
+            <ul className="flex gap-2 flex-col align-center pb-2 overflow-scroll justify-between">
               {displayInfo.map((info, index) => (
                 <button
                   key={index}
-                  className="bg-gray-200 text-gray-700 py-2 px-3 rounded hover:bg-gray-300"
+                  className="flex bg-gray-200 text-gray-700 py-2 px-3 rounded hover:bg-gray-300 justify-between items-center"
                 >
+                  <div className="w-10"></div>
                   {info}
+                  <FaTrash className="ml-2" />
                 </button>
               ))}
             </ul>
