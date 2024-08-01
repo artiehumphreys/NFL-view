@@ -49,13 +49,13 @@ function HomePage() {
 
   const deleteInjury = async (play_id, game, fName, lName, type) => {
     const response = await fetch(
-      `http://localhost:8080/removeInju2ry?game=${game}&play_id=${play_id}&fName=${fName}&lName=${lName}&type=${type}`,
+      `http://localhost:8080/removeInjury?game=${game}&play_id=${play_id}&fName=${fName}&lName=${lName}&type=${type}`,
       {
         method: "DELETE",
       }
     );
     if (response.ok) {
-      navigate("/home");
+      window.location.reload();
     } else {
       console.error(`Failed to remove item ${response.url}`);
     }
