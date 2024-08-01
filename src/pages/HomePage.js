@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { FaSearch, FaBars, FaTimes } from "react-icons/fa";
+import { FaSearch, FaBars, FaTimes, FaTrash } from "react-icons/fa";
 import styles from "../css/HomePage.module.css";
+import { useNavigate } from "react-router-dom";
+import Header from "../components/Header.js";
+import Footer from "../components/Footer.js";
+import Modal from "../components/Modal.js";
+import Success from "../components/Success.js";
 
 function HomePage() {
+  const navigate = useNavigate();
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -11,6 +18,18 @@ function HomePage() {
   const [visibleGameIndex, setVisibleGameIndex] = useState(null);
   const toggleVisibility = (index) => {
     setVisibleGameIndex(visibleGameIndex === index ? null : index);
+  };
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentEvent, setCurrentEvent] = useState(null);
+
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
+  const toggleSuccess = () => {
+    setIsSuccessOpen(!isSuccessOpen);
   };
 
   const [searchTags, setSearchTags] = useState([]);
@@ -33,11 +52,50 @@ function HomePage() {
       .then((data) => setGameInfo(data))
       .catch((error) => console.error("Error fetching games:", error));
   }, []);
+
+  useEffect(() => {
+    if (localStorage.getItem("deleteSuccess") === "true") {
+      toggleSuccess();
+      localStorage.removeItem("deleteSuccess");
+    }
+  }, []);
+
+  const deleteInjury = async (play_id, game, fName, lName, type) => {
+    const response = await fetch(
+      `http://localhost:8080/removeInjury?game=${game}&play_id=${play_id}&fName=${fName}&lName=${lName}&type=${type}`,
+      {
+        method: "DELETE",
+      }
+    );
+    if (response.ok) {
+      localStorage.setItem("deleteSuccess", "true");
+      window.location.reload();
+    } else {
+      console.error(`Failed to remove item ${response.url}`);
+    }
+  };
+
   return (
     <div className={`${styles.container} min-h-screen flex flex-col`}>
-      <header className="bg-blue-500 text-white text-center py-4">
-        <h1 className="text-5xl font-bold">NFL View</h1>
-      </header>
+      <Header path="/"></Header>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={toggleModal}
+        onDelete={() =>
+          deleteInjury(
+            currentEvent.PlayID,
+            currentEvent.Game,
+            currentEvent.FirstName,
+            currentEvent.LastName,
+            currentEvent.Type
+          )
+        }
+      />
+      <Success
+        isOpen={isSuccessOpen}
+        onChange={toggleModal}
+        message="Entry successfully removed."
+      ></Success>
       <div className="flex flex-1 relative overflow-auto">
         <aside className="w-64 bg-gray-100 px-3 py-4 absolute left-0 top-0 bottom-0 flex flex-col flex-1">
           <div className="flex-shrink-0 mb-4">
@@ -45,18 +103,30 @@ function HomePage() {
           </div>
           <div className="flex-1 overflow-auto">
             {gameInfo.map((game, index) => (
-              // https://preline.co/docs/dropdown.html
-              <div key={index}>
-                <h2
+              <div key={index} className="mb-4">
+                <div
                   onClick={() => toggleVisibility(index)}
-                  className="font-medium hs-dropdown-toggle py-2 px-1 inline-flex items-center gap-x-2 font-large rounded-lg border-gray-200 hover:bg-gray-50 focus:bg-gray-50 cursor-pointer w-full"
+                  className={
+                    "flex gap-2 items-center font-medium text-lg py-2 px-1 rounded-lg border-gray-200 hover:bg-gray-50 focus:bg-gray-50 cursor-pointer w-full"
+                  }
                 >
-                  {game.game}
-                  <h2 className="font-normal hs-dropdown-toggle inline-flex items-center gap-x-2 font-large rounded-lg border-gray-200 hover:bg-gray-50 focus:bg-gray-50 cursor-pointer w-full">
-                    ({game.events.length})
-                  </h2>
+                  <div
+                    className={`gap-2 flex ${
+                      visibleGameIndex === index
+                        ? "hover:underline decoration-black"
+                        : ""
+                    }`}
+                    onClick={() =>
+                      visibleGameIndex === index
+                        ? navigate(`/games/${game.game}`)
+                        : ""
+                    }
+                  >
+                    <span>{game.game}</span>
+                    <span className="font-normal">({game.events.length})</span>
+                  </div>
                   <svg
-                    className={`hs-dropdown-open:rotate-180 size-4 ${
+                    className={`hs-dropdown-open:rotate-180 ml-auto ${
                       visibleGameIndex === index ? "rotate-180" : ""
                     }`}
                     xmlns="http://www.w3.org/2000/svg"
@@ -71,7 +141,7 @@ function HomePage() {
                   >
                     <path d="m6 9 6 6 6-6" />
                   </svg>
-                </h2>
+                </div>
                 {visibleGameIndex === index && (
                   <ul className="gap-2 py-2 flex flex-col text-left">
                     {game.events.map((event, idx) => (
@@ -111,13 +181,28 @@ function HomePage() {
                 </button>
               ))}
             </div>
-            <ul className="flex gap-2 flex-col align-left pb-2 overflow-scroll">
+            <ul className="flex gap-2 flex-col align-center pb-2 overflow-scroll justify-between">
               {displayInfo.map((info, index) => (
                 <button
                   key={index}
-                  className="bg-gray-200 text-gray-700 py-2 px-3 rounded hover:bg-gray-300"
+                  onClick={() => {
+                    setCurrentEvent(info);
+                  }}
+                  className="flex bg-gray-200 text-gray-700 py-2 px-3 rounded hover:bg-gray-300 justify-between items-center"
                 >
-                  {info}
+                  <div className="flex-grow text-center">
+                    {info.Game} - {info.FirstName} {info.LastName} -{" "}
+                    {info.GamePosition} {info.Team} #{info.JerseyNumber} -{" "}
+                    {info.Type}
+                  </div>
+                  <FaTrash
+                    className="ml-2 cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setCurrentEvent(info);
+                      toggleModal();
+                    }}
+                  />
                 </button>
               ))}
             </ul>
@@ -154,21 +239,7 @@ function HomePage() {
           </ul>
         </aside>
       </div>
-      <footer class="bg-blue-500">
-        <div class="w-full mx-auto max-w-screen p-3 flex items-center justify-center">
-          <span class="text-sm text-white text-center">
-            © 2024<span class="text-sm text-white"> </span>
-            <a
-              href="https://biocorellc.com/"
-              target="_blank"
-              class="hover:underline"
-            >
-              Biomechanics Consulting & Research, LLC
-            </a>
-            . All Rights Reserved.
-          </span>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
