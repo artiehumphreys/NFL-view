@@ -73,18 +73,13 @@ func GetGameInfo(db *sql.DB) (map[string][]string, error) {
 	return results, nil
 }
 
-func RemoveInjury(db *sql.DB, items []string) error {
-	if len(items) != 6 {
-		return fmt.Errorf("expected 6 items, got %d", len(items))
-	}
+func RemoveInjury(db *sql.DB, injury models.InjuryDisplay) error {
 	query := `
-		DELETE FROM players 
+		DELETE FROM injuries 
 		WHERE game = ? 
 		AND play_id = ?
 		AND first_name = ? 
 		AND last_name = ? 
-		AND game_position = ? 
-		AND team = ? 
 		AND type = ?`
 
 	stmt, err := db.Prepare(query)
@@ -93,7 +88,7 @@ func RemoveInjury(db *sql.DB, items []string) error {
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(items[0], items[1], items[2], items[3], items[4], items[5])
+	_, err = stmt.Exec(injury.Game, injury.PlayID, injury.FirstName, injury.LastName, injury.Type)
 	if err != nil {
 		return err
 	}

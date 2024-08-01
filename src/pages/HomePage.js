@@ -47,15 +47,17 @@ function HomePage() {
       .catch((error) => console.error("Error fetching games:", error));
   }, []);
 
-  const deleteInjury = async (id) => {
-    console.log(id);
-    const response = await fetch(`http://localhost:8080/removeInjury/${id}`, {
-      method: "DELETE",
-    });
+  const deleteInjury = async (play_id, game, fName, lName, type) => {
+    const response = await fetch(
+      `http://localhost:8080/removeInju2ry?game=${game}&play_id=${play_id}&fName=${fName}&lName=${lName}&type=${type}`,
+      {
+        method: "DELETE",
+      }
+    );
     if (response.ok) {
       navigate("/home");
     } else {
-      console.error("Failed to remove item");
+      console.error(`Failed to remove item ${response.url}`);
     }
   };
 
@@ -65,7 +67,15 @@ function HomePage() {
       <Modal
         isOpen={isModalOpen}
         onClose={toggleModal}
-        onDelete={() => deleteInjury(currentEvent.PlayID)}
+        onDelete={() =>
+          deleteInjury(
+            currentEvent.PlayID,
+            currentEvent.Game,
+            currentEvent.FirstName,
+            currentEvent.LastName,
+            currentEvent.Type
+          )
+        }
       />
       <div className="flex flex-1 relative overflow-auto">
         <aside className="w-64 bg-gray-100 px-3 py-4 absolute left-0 top-0 bottom-0 flex flex-col flex-1">
@@ -162,13 +172,15 @@ function HomePage() {
                   className="flex bg-gray-200 text-gray-700 py-2 px-3 rounded hover:bg-gray-300 justify-between items-center"
                 >
                   <div className="flex-grow text-center">
-                    {info.FirstName} {info.LastName} - {info.GamePosition} -{" "}
-                    {info.Team} - #{info.JerseyNumber} - {info.Type}
+                    {info.Game} - {info.FirstName} {info.LastName} -{" "}
+                    {info.GamePosition} {info.Team} #{info.JerseyNumber} -{" "}
+                    {info.Type}
                   </div>
                   <FaTrash
                     className="ml-2 cursor-pointer"
                     onClick={(e) => {
                       e.stopPropagation();
+                      setCurrentEvent(info);
                       toggleModal();
                     }}
                   />
