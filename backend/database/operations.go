@@ -94,3 +94,26 @@ func RemoveInjury(db *sql.DB, injury models.InjuryDisplay) error {
 	}
 	return nil
 }
+func GetGameInfo(db *sql.DB, game_id string) ([]models.InjuryDisplay, error) {
+	query := "SELECT * FROM injuries WHERE game = ?"
+	rows, err := db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var results []models.InjuryDisplay
+	for rows.Next() {
+		var instance models.InjuryDisplay
+		if err := rows.Scan(&instance.Game, &instance.PlayID, &instance.Type, &instance.GamePosition, &instance.Team, &instance.JerseyNumber, &instance.FirstName, &instance.LastName); err != nil {
+			return nil, err
+		}
+		results = append(results, instance)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return results, nil
+
+}

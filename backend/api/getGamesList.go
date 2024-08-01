@@ -12,24 +12,24 @@ import (
 
 func GetGamesListHandler(db *sql.DB) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-		gameInfo, err := database.GetGamesList(db)
+		gameList, err := database.GetGamesList(db)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
-		keys := make([]string, 0, len(gameInfo))
-		for k := range gameInfo {
+		keys := make([]string, 0, len(gameList))
+		for k := range gameList {
 			keys = append(keys, k)
 		}
 		sort.Strings(keys)
 
-		sorted := make([]GameInfo, 0, len(keys))
+		sorted := make([]GameList, 0, len(keys))
 
 		for _, k := range keys {
-			sorted = append(sorted, GameInfo{
+			sorted = append(sorted, GameList{
 				Game:   k,
-				Events: gameInfo[k],
+				Events: gameList[k],
 			})
 		}
 
@@ -38,7 +38,7 @@ func GetGamesListHandler(db *sql.DB) httprouter.Handle {
 	}
 }
 
-type GameInfo struct {
+type GameList struct {
 	Game   string   `json:"game"`
 	Events []string `json:"events"`
 }
