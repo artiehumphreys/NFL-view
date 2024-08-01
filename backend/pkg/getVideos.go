@@ -13,7 +13,7 @@ func GetVideosHandler() httprouter.Handle {
 		query := r.URL.Query()
 		gameID := query.Get("game")
 
-		pattern := filepath.Join("../../alpha/nfl_videos", "0"+gameID+"*0001_000_15000.mp4")
+		pattern := filepath.Join("../public/alpha/nfl_videos", "0"+gameID+"_*_0001_000_15000.mp4")
 		files, err := filepath.Glob(pattern)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
