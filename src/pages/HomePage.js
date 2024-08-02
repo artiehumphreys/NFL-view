@@ -111,16 +111,8 @@ function HomePage() {
                   }
                 >
                   <div
-                    className={`gap-2 flex ${
-                      visibleGameIndex === index
-                        ? "hover:underline decoration-black"
-                        : ""
-                    }`}
-                    onClick={() =>
-                      visibleGameIndex === index
-                        ? navigate(`/games/${game.game}`)
-                        : ""
-                    }
+                    className="gap-2 flex hover:underline decoration-black"
+                    onClick={() => navigate(`/games/${game.game}`)}
                   >
                     <span>{game.game}</span>
                     <span className="font-normal">({game.events.length})</span>
