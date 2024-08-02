@@ -1,17 +1,78 @@
 import Header from "../components/Header.js";
 import Footer from "../components/Footer.js";
 import { useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 
 function GamePage() {
   const { game_id } = useParams();
+  const [injuries, setInjuries] = useState([]);
+  const [videos, setVideos] = useState([]);
+
+  useEffect(() => {
+    console.log(game_id);
+    fetch(`http://localhost:8080/game?game=${game_id}`)
+      .then((response) => response.json())
+      .then((data) => setInjuries(data));
+
+    fetch(`http://localhost:8080/video?game=${game_id}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setVideos(data);
+        console.log(data);
+      });
+  }, [game_id]);
+
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="max-h-screen flex h-screen flex-col">
       <Header path="/home"></Header>
-      <div className="flex flex-1 relative overflow-auto justify-center pt-4">
-        <h1 className="text-center font-medium text-4xl">Game {game_id}</h1>
+      <div className="flex flex-1 relative justify-center pt-4 overflow-auto mb-4">
+        <div className="w-full max-w-4xl">
+          <h1 className="text-center font-medium text-4xl mb-6">
+            Game {game_id}
+          </h1>
+          {injuries.map((injury, index) => (
+            <div
+              key={injury.PlayID}
+              className="p-4 border rounded mb-4 shadow-lg flex-row flex justify-between"
+            >
+              <div>
+                <h2 className="text-xl font-semibold">
+                  {injury.FirstName} {injury.LastName}
+                </h2>
+                <ul className="list-disc pl-5 mt-2">
+                  <li>
+                    <strong>Game:</strong> {injury.Game}
+                  </li>
+                  <li>
+                    <strong>Type:</strong> {injury.Type}
+                  </li>
+                  <li>
+                    <strong>Position:</strong> {injury.GamePosition}
+                  </li>
+                  <li>
+                    <strong>Team:</strong> {injury.Team}
+                  </li>
+                  <li>
+                    <strong>Jersey Number:</strong> {injury.JerseyNumber}
+                  </li>
+                </ul>
+              </div>
+              {videos[index] && (
+                <video
+                  controls
+                  className="w-1/2"
+                  src={`${process.env.PUBLIC_URL}/alpha/nfl_videos/${videos[index]}`}
+                >
+                  Your browser does not support the video tag.
+                </video>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
       <Footer></Footer>
     </div>
   );
 }
+
 export default GamePage;

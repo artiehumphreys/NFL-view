@@ -3,6 +3,7 @@ package database
 import (
 	"database/sql"
 	"fmt"
+	"log"
 
 	"github.com/artiehumphreys/NFL-view/models"
 )
@@ -52,7 +53,7 @@ func GetInjuryInfo(db *sql.DB) ([]models.InjuryDisplay, error) {
 	return results, nil
 }
 
-func GetGameInfo(db *sql.DB) (map[string][]string, error) {
+func GetGamesList(db *sql.DB) (map[string][]string, error) {
 	var query = "SELECT game, play_id, team, first_name, last_name FROM injuries"
 	rows, err := db.Query(query)
 	if err != nil {
@@ -93,4 +94,30 @@ func RemoveInjury(db *sql.DB, injury models.InjuryDisplay) error {
 		return err
 	}
 	return nil
+}
+func GetGameInfo(db *sql.DB, gameID string) ([]models.InjuryDisplay, error) {
+	query := "SELECT game, play_id, type, game_position, team, jersey_number, first_name, last_name FROM injuries WHERE game = ?"
+	rows, err := db.Query(query, gameID)
+	if err != nil {
+		log.Printf("Error querying database: %v", err)
+		return nil, err
+	}
+	defer rows.Close()
+
+	var results []models.InjuryDisplay
+	for rows.Next() {
+		var instance models.InjuryDisplay
+		if err := rows.Scan(&instance.Game, &instance.PlayID, &instance.Type, &instance.GamePosition, &instance.Team, &instance.JerseyNumber, &instance.FirstName, &instance.LastName); err != nil {
+			log.Printf("Error scanning row: %v", err)
+			return nil, err
+		}
+		results = append(results, instance)
+	}
+
+	if err := rows.Err(); err != nil {
+		log.Printf("Row iteration error: %v", err)
+		return nil, err
+	}
+
+	return results, nil
 }
