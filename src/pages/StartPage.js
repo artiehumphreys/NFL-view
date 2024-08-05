@@ -1,8 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import NFLLogo from "../components/NFLLogo";
 import styles from "../css/StartPage.module.css";
+import { useNavigation } from "../contexts/NavigationContext.js";
+import { useLocation } from "react-router-dom";
 
 function StartPage() {
+  const { push } = useNavigation();
+  const location = useLocation();
+
+  useEffect(() => {
+    push(location.pathname);
+  }, [location.pathname, push]);
   return (
     <div className={styles.container}>
       <div className={styles.videoBackground}>

@@ -1,6 +1,7 @@
 import Header from "../components/Header.js";
 import Footer from "../components/Footer.js";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
+import { useNavigation } from "../contexts/NavigationContext.js";
 import React, { useEffect, useState } from "react";
 import SideBar from "../components/SideBar.js";
 import MenuBar from "../components/MenuBar.js";
@@ -9,6 +10,13 @@ function GamePage() {
   const { game_id } = useParams();
   const [injuries, setInjuries] = useState([]);
   const [videos, setVideos] = useState([]);
+
+  const { push } = useNavigation();
+  const location = useLocation();
+
+  useEffect(() => {
+    push(location.pathname);
+  }, [location.pathname, push]);
 
   useEffect(() => {
     console.log(game_id);

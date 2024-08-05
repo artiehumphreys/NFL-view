@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useNavigation } from "../contexts/NavigationContext.js";
+import { useLocation } from "react-router-dom";
 import { FaSearch, FaTrash } from "react-icons/fa";
 import styles from "../css/HomePage.module.css";
 import Header from "../components/Header.js";
@@ -9,6 +11,13 @@ import SideBar from "../components/SideBar.js";
 import MenuBar from "../components/MenuBar.js";
 
 function HomePage() {
+  const { push } = useNavigation();
+  const location = useLocation();
+
+  useEffect(() => {
+    push(location.pathname);
+  }, [location.pathname, push]);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentEvent, setCurrentEvent] = useState(null);
 
