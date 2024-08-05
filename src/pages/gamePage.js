@@ -30,7 +30,6 @@ function GamePage() {
       .then((response) => response.json())
       .then((data) => {
         setVideos(data);
-        console.log(data);
       });
   }, [game_id]);
 
