@@ -2,6 +2,8 @@ import Header from "../components/Header.js";
 import Footer from "../components/Footer.js";
 import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
+import SideBar from "../components/SideBar.js";
+import MenuBar from "../components/MenuBar.js";
 
 function GamePage() {
   const { game_id } = useParams();
@@ -30,6 +32,7 @@ function GamePage() {
           <h1 className="text-center font-medium text-4xl mb-6">
             Game {game_id}
           </h1>
+          <SideBar></SideBar>
           {injuries.map((injury, index) => (
             <div
               key={injury.PlayID}
@@ -66,6 +69,7 @@ function GamePage() {
                   Your browser does not support the video tag.
                 </video>
               )}
+              <MenuBar></MenuBar>
             </div>
           ))}
         </div>

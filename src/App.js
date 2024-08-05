@@ -10,8 +10,8 @@ function App() {
       <Routes>
         <Route path="/" element={<StartPage />} exact />
         <Route path="/home" element={<HomePage />} exact />
-        <Route path="/game/:game_id" element={<GamePage />} />
-        <Route path="/game/:game_id/play/:play_id" element={<InjuryPage />} />
+        <Route path="/games/:game_id" element={<GamePage />} />
+        <Route path="/games/:game_id/plays/:play_id" element={<InjuryPage />} />
       </Routes>
     </Router>
   );
