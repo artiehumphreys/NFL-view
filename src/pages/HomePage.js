@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigation } from "../contexts/NavigationContext.js";
 import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FaSearch, FaTrash } from "react-icons/fa";
 import styles from "../css/HomePage.module.css";
 import Header from "../components/Header.js";
@@ -11,6 +12,7 @@ import SideBar from "../components/SideBar.js";
 import MenuBar from "../components/MenuBar.js";
 
 function HomePage() {
+  const navigate = useNavigate();
   const { push } = useNavigation();
   const location = useLocation();
 
@@ -69,7 +71,7 @@ function HomePage() {
 
   return (
     <div className={`${styles.container} min-h-screen flex flex-col`}>
-      <Header path="/"></Header>
+      <Header></Header>
       <Modal
         isOpen={isModalOpen}
         onClose={toggleModal}
@@ -119,6 +121,7 @@ function HomePage() {
                   key={index}
                   onClick={() => {
                     setCurrentEvent(info);
+                    navigate(`/games/${info.Game}/plays/${info.PlayID}`);
                   }}
                   className="flex bg-gray-200 text-gray-700 py-2 px-3 rounded hover:bg-gray-300 justify-between items-center"
                 >
