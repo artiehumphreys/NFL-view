@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaSearch, FaBars, FaTimes, FaTrash } from "react-icons/fa";
 import styles from "../css/HomePage.module.css";
-import { useNavigate } from "react-router-dom";
 import Header from "../components/Header.js";
 import Footer from "../components/Footer.js";
 import Modal from "../components/Modal.js";
@@ -28,7 +27,6 @@ function HomePage() {
 
   const [searchTags, setSearchTags] = useState([]);
   const [displayInfo, setDisplayInfo] = useState([]);
-  const [gameInfo, setGameInfo] = useState([]);
 
   useEffect(() => {
     fetch("http://localhost:8080/tags")
