@@ -1,12 +1,14 @@
-import Header from "../components/Header.js";
-import Footer from "../components/Footer.js";
-import { useParams, useLocation } from "react-router-dom";
-import { useNavigation } from "../contexts/NavigationContext.js";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
+import { useNavigation } from "../contexts/NavigationContext.js";
 import SideBar from "../components/SideBar.js";
 import MenuBar from "../components/MenuBar.js";
+import Header from "../components/Header.js";
+import Footer from "../components/Footer.js";
 
 function GamePage() {
+  const navigate = useNavigate();
+
   const { game_id } = useParams();
   const [injuries, setInjuries] = useState([]);
   const [videos, setVideos] = useState([]);
@@ -44,7 +46,10 @@ function GamePage() {
           {injuries.map((injury, index) => (
             <div
               key={injury.PlayID}
-              className="p-4 border rounded mb-4 shadow-lg flex-row flex justify-between"
+              className="p-4 border rounded mb-4 shadow-lg flex-row flex justify-between cursor-pointer"
+              onClick={() =>
+                navigate(`/games/${injury.Game}/plays/${injury.PlayID}`)
+              }
             >
               <div>
                 <h2 className="text-xl font-semibold">

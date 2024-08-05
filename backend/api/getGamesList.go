@@ -7,6 +7,7 @@ import (
 	"sort"
 
 	"github.com/artiehumphreys/NFL-view/database"
+	"github.com/artiehumphreys/NFL-view/models"
 	"github.com/julienschmidt/httprouter"
 )
 
@@ -18,17 +19,24 @@ func GetGamesListHandler(db *sql.DB) httprouter.Handle {
 			return
 		}
 
-		keys := make([]string, 0, len(gameList))
+		keys := make([]models.GamePlayKey, 0, len(gameList))
 		for k := range gameList {
 			keys = append(keys, k)
 		}
-		sort.Strings(keys)
+
+		sort.Slice(keys, func(i, j int) bool {
+			if keys[i].Game == keys[j].Game {
+				return keys[i].PlayID < keys[j].PlayID
+			}
+			return keys[i].Game < keys[j].Game
+		})
 
 		sorted := make([]GameList, 0, len(keys))
 
 		for _, k := range keys {
 			sorted = append(sorted, GameList{
-				Game:   k,
+				Game:   k.Game,
+				PlayID: k.PlayID,
 				Events: gameList[k],
 			})
 		}
@@ -40,5 +48,6 @@ func GetGamesListHandler(db *sql.DB) httprouter.Handle {
 
 type GameList struct {
 	Game   string   `json:"game"`
+	PlayID string   `json:"play_id"`
 	Events []string `json:"events"`
 }

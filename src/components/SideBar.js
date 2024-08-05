@@ -62,6 +62,9 @@ function SideBar() {
                   <button
                     key={idx}
                     className="bg-gray-200 text-gray-700 py-2 mx-2 px-2 my-1 rounded hover:bg-gray-300 text-left"
+                    onClick={() =>
+                      navigate(`/games/${game.game}/plays/${game.play_id}`)
+                    }
                   >
                     {event}
                   </button>

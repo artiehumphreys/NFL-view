@@ -53,19 +53,24 @@ func GetInjuryInfo(db *sql.DB) ([]models.InjuryDisplay, error) {
 	return results, nil
 }
 
-func GetGamesList(db *sql.DB) (map[string][]string, error) {
+func GetGamesList(db *sql.DB) (map[models.GamePlayKey][]string, error) {
 	var query = "SELECT game, play_id, team, first_name, last_name FROM injuries"
 	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err
 	}
-	results := make(map[string][]string)
+
+	results := make(map[models.GamePlayKey][]string)
 	for rows.Next() {
 		var instance models.GameDisplay
 		if err := rows.Scan(&instance.Game, &instance.PlayID, &instance.Team, &instance.FirstName, &instance.LastName); err != nil {
 			return nil, err
 		}
-		results[instance.Game] = append(results[instance.Game], instance.String())
+		key := models.GamePlayKey{
+			Game:   instance.Game,
+			PlayID: instance.PlayID,
+		}
+		results[key] = append(results[key], instance.String())
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
