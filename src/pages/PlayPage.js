@@ -18,6 +18,7 @@ function PlayPage() {
       .then((response) => response.json())
       .then((data) => {
         data = data || [];
+        console.log(data);
         setVideos(data);
       });
   }, [game_id, play_id]);
@@ -42,18 +43,18 @@ function PlayPage() {
           </h1>
           <div></div>
           <div>
+            {(videos[0] && (
+              <video
+                controls
+                className="w-1/2"
+                src={`${process.env.PUBLIC_URL}/alpha/nfl_videos/${videos[0]}`}
+              ></video>
+            )) || <p className="flex items-center">Failed to Load Video.</p>}
             {(videos[1] && (
               <video
                 controls
                 className="w-1/2"
                 src={`${process.env.PUBLIC_URL}/alpha/nfl_videos/${videos[1]}`}
-              ></video>
-            )) || <p className="flex items-center">Failed to Load Video.</p>}
-            {(videos[2] && (
-              <video
-                controls
-                className="w-1/2"
-                src={`${process.env.PUBLIC_URL}/alpha/nfl_videos/${videos[2]}`}
               ></video>
             )) || <p className="flex items-center">Failed to Load Video.</p>}
           </div>
