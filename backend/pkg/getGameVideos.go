@@ -10,7 +10,7 @@ import (
 
 func GetGameVideosHandler() httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		gameID := ps.ByName("id")
+		gameID := ps.ByName("gameId")
 
 		glob := "0" + gameID + "_*_0001_000_*.mp4"
 

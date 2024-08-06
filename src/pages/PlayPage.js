@@ -14,12 +14,13 @@ function PlayPage() {
   const [videos, setVideos] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:8080/videos/other-views/${game_id}`)
+    fetch(`http://localhost:8080/games/${game_id}/plays/${play_id}/videos`)
       .then((response) => response.json())
       .then((data) => {
+        data = data || [];
         setVideos(data);
       });
-  }, [game_id]);
+  }, [game_id, play_id]);
 
   useEffect(() => {
     push(location.pathname);
@@ -41,16 +42,20 @@ function PlayPage() {
           </h1>
           <div></div>
           <div>
-            <video
-              controls
-              className="w-1/2"
-              src={`${process.env.PUBLIC_URL}/alpha/nfl_videos/${videos[1]}`}
-            ></video>
-            <video
-              controls
-              className="w-1/2"
-              src={`${process.env.PUBLIC_URL}/alpha/nfl_videos/${videos[2]}`}
-            ></video>
+            {(videos[1] && (
+              <video
+                controls
+                className="w-1/2"
+                src={`${process.env.PUBLIC_URL}/alpha/nfl_videos/${videos[1]}`}
+              ></video>
+            )) || <p className="flex items-center">Failed to Load Video.</p>}
+            {(videos[2] && (
+              <video
+                controls
+                className="w-1/2"
+                src={`${process.env.PUBLIC_URL}/alpha/nfl_videos/${videos[2]}`}
+              ></video>
+            )) || <p className="flex items-center">Failed to Load Video.</p>}
           </div>
         </div>
         <MenuBar></MenuBar>

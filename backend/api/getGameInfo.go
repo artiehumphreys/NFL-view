@@ -11,7 +11,7 @@ import (
 
 func GetGameInfoHandler(db *sql.DB) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		gameID := ps.ByName("id")
+		gameID := ps.ByName("gameId")
 
 		injuries, err := database.GetGameInfo(db, gameID)
 		if err != nil {
