@@ -2,8 +2,10 @@ package pkg
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"path/filepath"
+	"strings"
 
 	"github.com/julienschmidt/httprouter"
 )
@@ -13,9 +15,17 @@ func GetPlayVideosHandler() httprouter.Handle {
 		gameID := ps.ByName("gameId")
 		playID := ps.ByName("playId")
 
+		split := strings.Split(playID, "_")
+		if strings.Index(playID, "_") != -1 && split[1] == "1" {
+			playID = split[0]
+		}
+
+		formattedPlayID := fmt.Sprintf("%06s", playID)
+		formattedGameID := fmt.Sprintf("%06s", gameID)
+
 		patterns := []string{
-			"0" + gameID + "_00" + playID + "_0002_000_*.mp4",
-			"0" + gameID + "_00" + playID + "_0006_000_*.mp4",
+			fmt.Sprintf("%s_%s_0002_000_*.mp4", formattedGameID, formattedPlayID),
+			fmt.Sprintf("%s_%s_0006_000_*.mp4", formattedGameID, formattedPlayID),
 		}
 
 		var videos []string

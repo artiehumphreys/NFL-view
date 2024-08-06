@@ -2,6 +2,7 @@ package pkg
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"path/filepath"
 
@@ -11,8 +12,9 @@ import (
 func GetGameVideosHandler() httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		gameID := ps.ByName("gameId")
+		formattedGameID := fmt.Sprintf("%06s", gameID)
 
-		glob := "0" + gameID + "_*_0001_000_*.mp4"
+		glob := formattedGameID + "_*_0001_000_*.mp4"
 
 		var videos []string
 		pattern := filepath.Join("../public/alpha/nfl_videos", glob)
