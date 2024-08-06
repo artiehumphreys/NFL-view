@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"strconv"
 
 	"github.com/artiehumphreys/NFL-view/models"
 )
@@ -101,6 +102,24 @@ func RemoveInjury(db *sql.DB, injury models.InjuryDisplay) error {
 	return nil
 }
 func GetGameInfo(db *sql.DB, gameID string) ([]models.InjuryDisplay, error) {
+	count := 1
+
+	replace := func(id *models.InjuryDisplay) {
+		id.PlayID = id.PlayID + "_" + strconv.Itoa(count)
+	}
+
+	findAndReplace := func(list []models.InjuryDisplay, toFind string) bool {
+		flag := false
+		for i := range list {
+			if list[i].PlayID == toFind {
+				replace(&list[i])
+				count++
+				flag = true
+			}
+		}
+		return flag
+	}
+
 	query := "SELECT game, play_id, type, game_position, team, jersey_number, first_name, last_name FROM injuries WHERE game = ?"
 	rows, err := db.Query(query, gameID)
 	if err != nil {
@@ -115,6 +134,9 @@ func GetGameInfo(db *sql.DB, gameID string) ([]models.InjuryDisplay, error) {
 		if err := rows.Scan(&instance.Game, &instance.PlayID, &instance.Type, &instance.GamePosition, &instance.Team, &instance.JerseyNumber, &instance.FirstName, &instance.LastName); err != nil {
 			log.Printf("Error scanning row: %v", err)
 			return nil, err
+		}
+		if findAndReplace(results, instance.PlayID) {
+			replace(&instance)
 		}
 		results = append(results, instance)
 	}

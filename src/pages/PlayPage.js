@@ -42,7 +42,14 @@ function PlayPage() {
           <div></div>
           <div>
             <video
-              src={`${process.env.PUBLIC_URL}/alpha/nfl_videos/${videos[0]}`}
+              controls
+              className="w-1/2"
+              src={`${process.env.PUBLIC_URL}/alpha/nfl_videos/${videos[1]}`}
+            ></video>
+            <video
+              controls
+              className="w-1/2"
+              src={`${process.env.PUBLIC_URL}/alpha/nfl_videos/${videos[2]}`}
             ></video>
           </div>
         </div>
