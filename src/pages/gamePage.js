@@ -24,13 +24,13 @@ function GamePage() {
     fetch(`http://localhost:8080/games/${game_id}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         setInjuries(data);
       });
 
-    fetch(`http://localhost:8080/videos/broadcast/${game_id}`)
+    fetch(`http://localhost:8080/games/${game_id}/videos`)
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         setVideos(data);
       });
   }, [game_id]);
@@ -75,14 +75,14 @@ function GamePage() {
                     </li>
                   </ul>
                 </div>
-                {videos[index] && (
+                {(videos[index] && (
                   <video
                     controls
                     className="w-1/2"
                     src={`${process.env.PUBLIC_URL}/alpha/nfl_videos/${videos[index]}`}
-                  >
-                    Your browser does not support the video tag.
-                  </video>
+                  ></video>
+                )) || (
+                  <p className="flex items-center">Failed to Load Video.</p>
                 )}
               </div>
             ))}
