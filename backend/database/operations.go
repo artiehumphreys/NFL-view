@@ -4,9 +4,9 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"strconv"
 
 	"github.com/artiehumphreys/NFL-view/models"
+	"github.com/artiehumphreys/NFL-view/pkg"
 )
 
 func GetField(db *sql.DB, field string) ([]string, error) {
@@ -54,24 +54,24 @@ func GetInjuryInfo(db *sql.DB) ([]models.InjuryDisplay, error) {
 	return results, nil
 }
 
-func GetGamesList(db *sql.DB) (map[models.GamePlayKey][]string, error) {
-	var query = "SELECT game, play_id, team, first_name, last_name FROM injuries"
+func GetGamesList(db *sql.DB) (map[string][]models.InjuryDisplay, error) {
+	var query = "SELECT game, play_id, type, game_position, team, jersey_number, first_name, last_name FROM injuries"
 	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
-	results := make(map[models.GamePlayKey][]string)
+	count := 1
+	results := make(map[string][]models.InjuryDisplay)
 	for rows.Next() {
-		var instance models.GameDisplay
-		if err := rows.Scan(&instance.Game, &instance.PlayID, &instance.Team, &instance.FirstName, &instance.LastName); err != nil {
+		var instance models.InjuryDisplay
+		if err := rows.Scan(&instance.Game, &instance.PlayID, &instance.Type, &instance.GamePosition, &instance.Team, &instance.JerseyNumber, &instance.FirstName, &instance.LastName); err != nil {
 			return nil, err
 		}
-		key := models.GamePlayKey{
-			Game:   instance.Game,
-			PlayID: instance.PlayID,
-		}
-		results[key] = append(results[key], instance.String())
+
+		results[instance.Game] = append(results[instance.Game], instance)
+		count = pkg.FindAndReplace(results[instance.Game], &instance, count)
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
@@ -104,22 +104,6 @@ func RemoveInjury(db *sql.DB, injury models.InjuryDisplay) error {
 func GetGameInfo(db *sql.DB, gameID string) ([]models.InjuryDisplay, error) {
 	count := 1
 
-	replace := func(id *models.InjuryDisplay) {
-		id.PlayID = id.PlayID + "_" + strconv.Itoa(count)
-	}
-
-	findAndReplace := func(list []models.InjuryDisplay, toFind string) bool {
-		flag := false
-		for i := range list {
-			if list[i].PlayID == toFind {
-				replace(&list[i])
-				count++
-				flag = true
-			}
-		}
-		return flag
-	}
-
 	query := "SELECT game, play_id, type, game_position, team, jersey_number, first_name, last_name FROM injuries WHERE game = ?"
 	rows, err := db.Query(query, gameID)
 	if err != nil {
@@ -135,9 +119,7 @@ func GetGameInfo(db *sql.DB, gameID string) ([]models.InjuryDisplay, error) {
 			log.Printf("Error scanning row: %v", err)
 			return nil, err
 		}
-		if findAndReplace(results, instance.PlayID) {
-			replace(&instance)
-		}
+		count = pkg.FindAndReplace(results, &instance, count)
 		results = append(results, instance)
 	}
 

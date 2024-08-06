@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 function SideBar() {
   const navigate = useNavigate();
 
-  const [gameInfo, setGameInfo] = useState([]);
+  const [gameInfo, setGameInfo] = useState({});
   const [visibleGameIndex, setVisibleGameIndex] = useState(null);
 
   const toggleVisibility = (index) => {
@@ -24,7 +24,7 @@ function SideBar() {
         <h2 className="text-2xl font-bold">Games</h2>
       </div>
       <div className="flex-1 overflow-auto">
-        {gameInfo.map((game, index) => (
+        {Object.entries(gameInfo).map(([gameID, plays], index) => (
           <div key={index} className="mb-4">
             <div
               onClick={() => toggleVisibility(index)}
@@ -34,10 +34,10 @@ function SideBar() {
             >
               <div
                 className="gap-2 flex hover:underline decoration-black"
-                onClick={() => navigate(`/games/${game.game}`)}
+                onClick={() => navigate(`/games/${gameID}`)}
               >
-                <span>{game.game}</span>
-                <span className="font-normal">({game.events.length})</span>
+                <span>{gameID}</span>
+                <span className="font-normal">({plays.length})</span>
               </div>
               <svg
                 className={`hs-dropdown-open:rotate-180 ml-auto ${
@@ -58,15 +58,15 @@ function SideBar() {
             </div>
             {visibleGameIndex === index && (
               <ul className="gap-2 py-2 flex flex-col text-left">
-                {game.events.map((event, idx) => (
+                {plays.map((event, idx) => (
                   <button
                     key={idx}
                     className="bg-gray-200 text-gray-700 py-2 mx-2 px-2 my-1 rounded hover:bg-gray-300 text-left"
                     onClick={() =>
-                      navigate(`/games/${game.game}/plays/${game.play_id[idx]}`)
+                      navigate(`/games/${gameID}/plays/${event.PlayID}`)
                     }
                   >
-                    {event}
+                    {event.FirstName} {event.LastName} - {event.Type}
                   </button>
                 ))}
               </ul>
