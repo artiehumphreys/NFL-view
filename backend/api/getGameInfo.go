@@ -10,9 +10,8 @@ import (
 )
 
 func GetGameInfoHandler(db *sql.DB) httprouter.Handle {
-	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-		query := r.URL.Query()
-		gameID := query.Get("game")
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		gameID := ps.ByName("id")
 
 		injuries, err := database.GetGameInfo(db, gameID)
 		if err != nil {
@@ -22,6 +21,5 @@ func GetGameInfoHandler(db *sql.DB) httprouter.Handle {
 
 		w.Header().Set("Content-Type", "application/json")
 		_ = json.NewEncoder(w).Encode(injuries)
-
 	}
 }

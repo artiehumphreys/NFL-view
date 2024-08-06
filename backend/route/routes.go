@@ -12,7 +12,8 @@ func RegisterRoutes(router *httprouter.Router, db *sql.DB) {
 	router.GET("/tags", api.GetSearchTagsHandler(db))
 	router.GET("/info", api.GetDisplayInfoHandler(db))
 	router.GET("/games", api.GetGamesListHandler(db))
-	router.GET("/game", api.GetGameInfoHandler(db))
-	router.GET("/video", pkg.GetVideosHandler())
-	router.DELETE("/removeInjury", api.RemoveInjuryHandler(db))
+	router.GET("/games/:id", api.GetGameInfoHandler(db))
+	router.GET("/videos/broadcast/:id", pkg.GetVideosHandler("_*_0001_000_15000.mp4"))
+	router.GET("/videos/other-views/:id", pkg.GetVideosHandler(""))
+	router.DELETE("/injuries", api.RemoveInjuryHandler(db))
 }

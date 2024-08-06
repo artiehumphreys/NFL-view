@@ -6,7 +6,6 @@ const NavigationContext = createContext();
 export const NavigationProvider = ({ children }) => {
   const [history, setHistory] = useState([]);
   const navigate = useNavigate();
-  console.log(history);
 
   const push = useCallback((path) => {
     setHistory((prev) => {

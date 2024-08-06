@@ -21,12 +21,13 @@ function GamePage() {
   }, [location.pathname, push]);
 
   useEffect(() => {
-    console.log(game_id);
-    fetch(`http://localhost:8080/game?game=${game_id}`)
+    fetch(`http://localhost:8080/games/${game_id}`)
       .then((response) => response.json())
-      .then((data) => setInjuries(data));
+      .then((data) => {
+        setInjuries(data);
+      });
 
-    fetch(`http://localhost:8080/video?game=${game_id}`)
+    fetch(`http://localhost:8080/videos/broadcast/${game_id}`)
       .then((response) => response.json())
       .then((data) => {
         setVideos(data);
@@ -44,7 +45,7 @@ function GamePage() {
           <SideBar></SideBar>
           {injuries.map((injury, index) => (
             <div
-              key={injury.PlayID}
+              key={index}
               className="p-4 border rounded mb-4 shadow-lg flex-row flex justify-between cursor-pointer"
               onClick={() =>
                 navigate(`/games/${injury.Game}/plays/${injury.PlayID}`)
