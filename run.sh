@@ -3,8 +3,10 @@ kill_process_on_port() {
   PORT=$1
   PID=$(lsof -t -i:$PORT)
   if [ -n "$PID" ]; then
-    echo "Killing process $PID on port $PORT"
-    kill $PID
+    for PID in $PIDS; do
+      echo "Killing process $PID on port $PORT"
+      kill $PID
+    done
   fi
 }
 kill_process_on_port 8080

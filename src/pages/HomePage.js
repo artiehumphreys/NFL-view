@@ -90,9 +90,9 @@ function HomePage() {
         onChange={toggleModal}
         message="Entry successfully removed."
       ></Success>
-      <div className="flex flex-1 relative overflow-auto">
+      <div className="flex flex-1 relative overflow-auto ">
         <SideBar></SideBar>
-        <main className="flex-1 p-6 flex flex-col items-center">
+        <main className="flex-1 p-6 flex flex-col items-center ml-2">
           <section className="flex flex-col my-1 w-max max-h-full">
             <div className="flex items-center mb-4">
               <input

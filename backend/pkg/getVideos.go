@@ -8,20 +8,28 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-func GetVideosHandler(glob string) httprouter.Handle {
+func GetVideosHandler() httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		gameID := ps.ByName("id")
 
-		pattern := filepath.Join("../public/alpha/nfl_videos", "0"+gameID+glob)
-		files, err := filepath.Glob(pattern)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
+		patterns := []string{
+			"0" + gameID + "_*_0001_000_*.mp4",
+			"0" + gameID + "_*_0002_000_*.mp4",
+			"0" + gameID + "_*_0006_000_*.mp4",
 		}
 
 		var videos []string
-		for _, file := range files {
-			videos = append(videos, filepath.Base(file))
+		for _, glob := range patterns {
+			pattern := filepath.Join("../public/alpha/nfl_videos", glob)
+			files, err := filepath.Glob(pattern)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			for _, file := range files {
+				filename := filepath.Base(file)
+				videos = append(videos, filename)
+			}
 		}
 
 		w.Header().Set("Content-Type", "application/json")

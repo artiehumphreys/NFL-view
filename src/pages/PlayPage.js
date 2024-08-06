@@ -6,7 +6,7 @@ import Footer from "../components/Footer.js";
 import MenuBar from "../components/MenuBar.js";
 import SideBar from "../components/SideBar.js";
 
-function PlayPage(index) {
+function PlayPage() {
   const navigate = useNavigate();
   const { game_id, play_id } = useParams();
   const { push } = useNavigation();
@@ -14,7 +14,7 @@ function PlayPage(index) {
   const [videos, setVideos] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:8080/videos/other-views?game=${game_id}`)
+    fetch(`http://localhost:8080/videos/other-views/${game_id}`)
       .then((response) => response.json())
       .then((data) => {
         setVideos(data);
@@ -42,9 +42,7 @@ function PlayPage(index) {
           <div></div>
           <div>
             <video
-              src={`${process.env.PUBLIC_URL}/alpha/nfl_videos/${
-                videos[index * 5]
-              }`}
+              src={`${process.env.PUBLIC_URL}/alpha/nfl_videos/${videos[0]}`}
             ></video>
           </div>
         </div>

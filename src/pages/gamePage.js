@@ -30,6 +30,7 @@ function GamePage() {
     fetch(`http://localhost:8080/videos/broadcast/${game_id}`)
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         setVideos(data);
       });
   }, [game_id]);
