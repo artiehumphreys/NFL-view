@@ -6,7 +6,7 @@ import { FaSearch, FaTrash, FaEdit } from "react-icons/fa";
 import styles from "../css/HomePage.module.css";
 import Header from "../components/Header.js";
 import Footer from "../components/Footer.js";
-import Modal from "../components/Modal.js";
+import DeleteModal from "../components/DeleteModal.js";
 import Success from "../components/Success.js";
 import SideBar from "../components/SideBar.js";
 import MenuBar from "../components/MenuBar.js";
@@ -20,11 +20,16 @@ function HomePage() {
     push(location.pathname);
   }, [location.pathname, push]);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [currentEvent, setCurrentEvent] = useState(null);
 
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
+  const toggleDeleteModal = () => {
+    setIsDeleteModalOpen(!isDeleteModalOpen);
+  };
+
+  const toggleEditInsertModal = () => {
+    setIsEditModalOpen(!isEditModalOpen);
   };
 
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
@@ -94,12 +99,20 @@ function HomePage() {
     }
   };
 
+  const handleSave = async (data) => {
+    toggleEditInsertModal();
+    fetch("http://localhost:8080/injuries")
+      .then((response) => response.json())
+      .then((data) => setInjuries(data))
+      .catch((error) => console.error("Error fetching display info:", error));
+  };
+
   return (
     <div className={`${styles.container} min-h-screen flex flex-col`}>
       <Header></Header>
-      <Modal
-        isOpen={isModalOpen}
-        onClose={toggleModal}
+      <DeleteModal
+        isOpen={isDeleteModalOpen}
+        onClose={toggleDeleteModal}
         onDelete={() =>
           deleteInjury(
             currentEvent.PlayID,
@@ -110,9 +123,15 @@ function HomePage() {
           )
         }
       />
+      <EditInsertModal
+        isOpen={isEditInsertModalOpen}
+        onClose={toggleEditInsertModal}
+        onSave={handleSave}
+        initialData={currentEvent}
+      />
       <Success
         isOpen={isSuccessOpen}
-        onChange={toggleModal}
+        onChange={toggleDeleteModal}
         message="Entry successfully removed."
       ></Success>
       <div className="flex flex-1 relative overflow-hidden">
@@ -168,6 +187,8 @@ function HomePage() {
                     className="mr-2 cursor-pointer"
                     onClick={(e) => {
                       e.stopPropagation();
+                      setCurrentEvent(info);
+                      toggleEditInsertModal();
                     }}
                   ></FaEdit>
                   <FaTrash
@@ -175,7 +196,7 @@ function HomePage() {
                     onClick={(e) => {
                       e.stopPropagation();
                       setCurrentEvent(info);
-                      toggleModal();
+                      toggleDeleteModal();
                     }}
                   />
                 </button>
