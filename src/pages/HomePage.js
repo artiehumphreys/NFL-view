@@ -33,7 +33,7 @@ function HomePage() {
   };
 
   const [searchTags, setSearchTags] = useState([]);
-  const [displayInfo, setDisplayInfo] = useState([]);
+  const [injuries, setInjuries] = useState([]);
 
   useEffect(() => {
     fetch("http://localhost:8080/tags")
@@ -41,9 +41,9 @@ function HomePage() {
       .then((data) => setSearchTags(data))
       .catch((error) => console.error("Error fetching search tags:", error));
 
-    fetch("http://localhost:8080/info")
+    fetch("http://localhost:8080/injuries")
       .then((response) => response.json())
-      .then((data) => setDisplayInfo(data))
+      .then((data) => setInjuries(data))
       .catch((error) => console.error("Error fetching display info:", error));
   }, []);
 
@@ -116,7 +116,7 @@ function HomePage() {
               ))}
             </div>
             <ul className="flex gap-2 flex-col align-center pb-2 overflow-scroll justify-between">
-              {displayInfo.map((info, index) => (
+              {injuries.map((info, index) => (
                 <button
                   key={index}
                   onClick={() => {
