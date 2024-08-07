@@ -1,6 +1,7 @@
 package pkg
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/artiehumphreys/NFL-view/models"
@@ -13,10 +14,11 @@ func FindAndReplace(list []models.InjuryDisplay, instance *models.InjuryDisplay,
 	}
 
 	for i := range list {
-		if list[i].PlayID == instance.PlayID && list[i].Game == instance.Game {
+		if list[i].PlayID == instance.PlayID && list[i] != *instance {
+			fmt.Println(count, list[i], *instance)
 			replace(&list[i])
 			count++
-			if count == 1 {
+			if count == 2 {
 				replace(instance)
 			}
 		}

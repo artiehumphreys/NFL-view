@@ -1,9 +1,9 @@
 package models
 
 type Record struct {
-	ID           int
-	PlayID       int
-	NFLPlayerID  int
+	ID           string
+	PlayID       string
+	NFLPlayerID  string
 	Type         string
 	GamePosition string
 	Team         string

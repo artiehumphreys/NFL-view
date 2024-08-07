@@ -63,11 +63,16 @@ func GetGamesList(db *sql.DB) (map[string][]models.InjuryDisplay, error) {
 	defer rows.Close()
 
 	count := 1
+	var prevGame = ""
 	results := make(map[string][]models.InjuryDisplay)
 	for rows.Next() {
 		var instance models.InjuryDisplay
 		if err := rows.Scan(&instance.Game, &instance.PlayID, &instance.Type, &instance.GamePosition, &instance.Team, &instance.JerseyNumber, &instance.FirstName, &instance.LastName); err != nil {
 			return nil, err
+		}
+		if prevGame != instance.Game {
+			count = 1
+			prevGame = instance.Game
 		}
 
 		results[instance.Game] = append(results[instance.Game], instance)

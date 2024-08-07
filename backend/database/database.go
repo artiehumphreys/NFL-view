@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 
 	"github.com/artiehumphreys/NFL-view/models"
@@ -16,9 +17,9 @@ func InitDB(filepath string) *sql.DB {
 
 	createTableSQL := `CREATE TABLE IF NOT EXISTS injuries (
 		auto_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-		"game" INTEGER,
-		"play_id" INTEGER,
-		"nfl_player_id" INTEGER,
+		"game" TEXT,
+		"play_id" TEXT,
+		"nfl_player_id" TEXT,
 		"type" TEXT,
 		"game_position" TEXT,
 		"team" TEXT,
@@ -54,5 +55,25 @@ func PopulateDB(db *sql.DB, records []models.Record) {
 			log.Fatal(err)
 		}
 		i += 1
+	}
+}
+
+func findDuplicates(db *sql.DB, record models.Record) {
+	var existingCount int
+	query := "SELECT COUNT(*) FROM injuries WHERE game = ? AND play_id = ?"
+	err := db.QueryRow(query, record.ID, record.PlayID).Scan(&existingCount)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	count := 1
+	originalPlayID := record.PlayID
+	for existingCount > 0 {
+		record.PlayID = fmt.Sprintf("%s_%d", originalPlayID, count)
+		count++
+		err = db.QueryRow(query, record.ID, record.PlayID).Scan(&existingCount)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 }
