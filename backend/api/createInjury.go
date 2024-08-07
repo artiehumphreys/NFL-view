@@ -51,6 +51,6 @@ func CreateInjuryHandler(db *sql.DB) httprouter.Handle {
 		}
 
 		w.WriteHeader(http.StatusCreated)
-		w.Write([]byte(fmt.Sprintf(`{"id": %d}`, id)))
+		_, _ = w.Write([]byte(fmt.Sprintf(`{"id": %d}`, id)))
 	}
 }
