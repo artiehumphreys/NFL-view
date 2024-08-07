@@ -16,7 +16,7 @@ func GetPlayVideosHandler() httprouter.Handle {
 		playID := ps.ByName("playId")
 
 		split := strings.Split(playID, "_")
-		if strings.Contains(playID, "_") && split[1] == "1" {
+		if strings.Contains(playID, "_") {
 			playID = split[0]
 		}
 
