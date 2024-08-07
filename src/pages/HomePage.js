@@ -33,7 +33,8 @@ function HomePage() {
   };
 
   const [searchTags, setSearchTags] = useState([]);
-  const [displayInfo, setDisplayInfo] = useState([]);
+  const [injuries, setInjuries] = useState([]);
+  const [currentTag, setCurrentTag] = useState("");
 
   useEffect(() => {
     fetch("http://localhost:8080/tags")
@@ -41,9 +42,9 @@ function HomePage() {
       .then((data) => setSearchTags(data))
       .catch((error) => console.error("Error fetching search tags:", error));
 
-    fetch("http://localhost:8080/info")
+    fetch("http://localhost:8080/injuries")
       .then((response) => response.json())
-      .then((data) => setDisplayInfo(data))
+      .then((data) => setInjuries(data))
       .catch((error) => console.error("Error fetching display info:", error));
   }, []);
 
@@ -66,6 +67,30 @@ function HomePage() {
       window.location.reload();
     } else {
       console.error(`Failed to remove item ${response.url}`);
+    }
+  };
+
+  const handleTagClick = async (tag) => {
+    setCurrentTag(tag);
+    try {
+      const response = await fetch(`http://localhost:8080/injuries?tag=${tag}`);
+      const data = (await response.json()) || [];
+      setInjuries(data);
+    } catch (error) {
+      console.error("Error fetching injuries:", error);
+    }
+  };
+
+  const handleSearchClick = async (keyword) => {
+    setCurrentTag("");
+    try {
+      const response = await fetch(
+        `http://localhost:8080/injuries?search=${keyword}`
+      );
+      const data = (await response.json()) || [];
+      setInjuries(data);
+    } catch (error) {
+      console.error("Error fetching injuries:", error);
     }
   };
 
@@ -99,9 +124,15 @@ function HomePage() {
                 type="text"
                 placeholder="Search..."
                 className="flex-grow p-2 border border-gray-300 rounded-l"
+                id="input"
               />
               <button className="bg-blue-500 text-white p-2 rounded-r">
-                <FaSearch className="w-6 h-6" />
+                <FaSearch
+                  className="w-6 h-6"
+                  onClick={() =>
+                    handleSearchClick(document.getElementById("input").value)
+                  }
+                />
               </button>
             </div>
             <div className="flex gap-2 flex-row items-center mb-4">
@@ -109,14 +140,17 @@ function HomePage() {
               {searchTags.map((tag, index) => (
                 <button
                   key={index}
-                  className="bg-gray-200 text-gray-700 py-1 px-3 rounded hover:bg-gray-300"
+                  className={`bg-gray-200 text-gray-700 py-1 px-3 rounded hover:bg-gray-400 active:bg-gray-300 ${
+                    currentTag === tag ? "bg-gray-400" : ""
+                  }`}
+                  onClick={() => handleTagClick(tag)}
                 >
                   {tag}
                 </button>
               ))}
             </div>
             <ul className="flex gap-2 flex-col align-center pb-2 overflow-scroll justify-between">
-              {displayInfo.map((info, index) => (
+              {injuries.map((info, index) => (
                 <button
                   key={index}
                   onClick={() => {

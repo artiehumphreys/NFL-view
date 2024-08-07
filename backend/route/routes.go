@@ -10,7 +10,7 @@ import (
 
 func RegisterRoutes(router *httprouter.Router, db *sql.DB) {
 	router.GET("/tags", api.GetSearchTagsHandler(db))
-	router.GET("/info", api.GetDisplayInfoHandler(db))
+	router.GET("/injuries", api.GetDisplayInfoHandler(db))
 	router.GET("/games", api.GetGamesListHandler(db))
 	router.GET("/games/:gameId", api.GetGameInfoHandler(db))
 	router.GET("/games/:gameId/videos", pkg.GetGameVideosHandler())
