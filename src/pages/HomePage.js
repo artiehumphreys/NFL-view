@@ -34,6 +34,7 @@ function HomePage() {
 
   const [searchTags, setSearchTags] = useState([]);
   const [injuries, setInjuries] = useState([]);
+  const [currentTag, setCurrentTag] = useState("");
 
   useEffect(() => {
     fetch("http://localhost:8080/tags")
@@ -70,6 +71,7 @@ function HomePage() {
   };
 
   const handleTagClick = async (tag) => {
+    setCurrentTag(tag);
     try {
       const response = await fetch(`http://localhost:8080/injuries?tag=${tag}`);
       const data = await response.json();
@@ -119,7 +121,9 @@ function HomePage() {
               {searchTags.map((tag, index) => (
                 <button
                   key={index}
-                  className="bg-gray-200 text-gray-700 py-1 px-3 rounded hover:bg-gray-300"
+                  className={`bg-gray-200 text-gray-700 py-1 px-3 rounded hover:bg-gray-400 active:bg-gray-300 ${
+                    currentTag === tag ? "bg-gray-400" : ""
+                  }`}
                   onClick={() => handleTagClick(tag)}
                 >
                   {tag}
