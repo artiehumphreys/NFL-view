@@ -20,6 +20,7 @@ func GetDisplayInfoHandler(db *sql.DB) httprouter.Handle {
 
 		switch {
 		case search != "":
+			tag = ""
 			injuries, err = database.ConcurrentSearch(db, search)
 		case tag != "":
 			injuries, err = database.GetInjuriesByType(db, tag)

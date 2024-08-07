@@ -74,7 +74,7 @@ function HomePage() {
     setCurrentTag(tag);
     try {
       const response = await fetch(`http://localhost:8080/injuries?tag=${tag}`);
-      const data = await response.json();
+      const data = (await response.json()) || [];
       setInjuries(data);
     } catch (error) {
       console.error("Error fetching injuries:", error);
@@ -82,11 +82,12 @@ function HomePage() {
   };
 
   const handleSearchClick = async (keyword) => {
+    setCurrentTag("");
     try {
       const response = await fetch(
         `http://localhost:8080/injuries?search=${keyword}`
       );
-      const data = await response.json();
+      const data = (await response.json()) || [];
       setInjuries(data);
     } catch (error) {
       console.error("Error fetching injuries:", error);
