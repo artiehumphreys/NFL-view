@@ -60,6 +60,13 @@ function HomePage() {
     }
   });
 
+  useEffect(() => {
+    if (localStorage.getItem("insertEditSuccess") === "true") {
+      toggleSuccess();
+      localStorage.removeItem("insertEditSuccess");
+    }
+  });
+
   const deleteInjury = async (play_id, game, fName, lName, type) => {
     const response = await fetch(
       `http://localhost:8080/injuries?game=${game}&play_id=${play_id}&fName=${fName}&lName=${lName}&type=${type}`,
@@ -72,6 +79,56 @@ function HomePage() {
       window.location.reload();
     } else {
       console.error(`Failed to remove item ${response.url}`);
+    }
+  };
+
+  const editInsertInjury = async (data) => {
+    const {
+      ID,
+      PlayID,
+      NFLPlayerID,
+      Type,
+      GamePosition,
+      Team,
+      JerseyNumber,
+      FirstName,
+      LastName,
+      Quality,
+    } = data;
+
+    const url = `http://localhost:8080/injuries`;
+
+    const options = {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ID,
+        PlayID,
+        NFLPlayerID,
+        Type,
+        GamePosition,
+        Team,
+        JerseyNumber,
+        FirstName,
+        LastName,
+        Quality,
+      }),
+    };
+
+    try {
+      const response = await fetch(url, options);
+      if (response.ok) {
+        localStorage.setItem("insertEditSuccess", "true");
+        window.location.reload();
+      } else {
+        console.error(
+          `Failed to create or update item: ${response.statusText}`
+        );
+      }
+    } catch (error) {
+      console.error("Error:", error);
     }
   };
 
@@ -99,14 +156,6 @@ function HomePage() {
     }
   };
 
-  const handleSave = async (data) => {
-    toggleEditInsertModal();
-    fetch("http://localhost:8080/injuries")
-      .then((response) => response.json())
-      .then((data) => setInjuries(data))
-      .catch((error) => console.error("Error fetching display info:", error));
-  };
-
   return (
     <div className={`${styles.container} min-h-screen flex flex-col`}>
       <Header></Header>
@@ -126,13 +175,18 @@ function HomePage() {
       <EditInsertModal
         isOpen={isEditInsertModalOpen}
         onClose={toggleEditInsertModal}
-        onSave={handleSave}
+        onSave={editInsertInjury}
         initialData={currentEvent}
       />
       <Success
         isOpen={isSuccessOpen}
         onChange={toggleDeleteModal}
         message="Entry successfully removed."
+      ></Success>
+      <Success
+        isOpen={isSuccessOpen}
+        onChange={toggleEditInsertModal}
+        message="Entry successfully added."
       ></Success>
       <div className="flex flex-1 relative overflow-hidden">
         <SideBar></SideBar>
