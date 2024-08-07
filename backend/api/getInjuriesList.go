@@ -20,8 +20,7 @@ func GetDisplayInfoHandler(db *sql.DB) httprouter.Handle {
 
 		switch {
 		case search != "":
-			//TODO: Search logic
-			injuries = make([]models.InjuryDisplay, 0, 1)
+			injuries, err = database.ConcurrentSearch(db, search)
 		case tag != "":
 			injuries, err = database.GetInjuriesByType(db, tag)
 		default:
