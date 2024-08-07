@@ -82,7 +82,16 @@ func findDuplicates(db *sql.DB, record *models.Record) {
 	fmt.Println(originalPlayID)
 
 	for existingCount > 0 {
-		record.PlayID = fmt.Sprintf("%s_%d", originalPlayID, count)
+		newPlayID := fmt.Sprintf("%s_%d", originalPlayID, count)
+		if count == 1 {
+			updateQuery := "UPDATE injuries SET play_id = ? WHERE game = ? AND play_id = ?"
+			_, err = db.Exec(updateQuery, newPlayID, record.ID, record.PlayID)
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
+
+		record.PlayID = newPlayID
 		count++
 		err = db.QueryRow(query, record.ID, record.PlayID).Scan(&existingCount)
 		if err != nil {
