@@ -18,7 +18,9 @@ func main() {
 	filePath := "../public/alpha/NFLview_Database_2024.07.csv"
 	records := pkg.ReadCsvFile(filePath)
 
-	database.PopulateDB(db, records)
+	if !database.IsTablePopulated(db) {
+		database.PopulateDB(db, records)
+	}
 
 	router := httprouter.New()
 

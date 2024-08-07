@@ -5,7 +5,6 @@ import (
 	"io"
 	"log"
 	"os"
-	"strconv"
 
 	"github.com/artiehumphreys/NFL-view/models"
 )
@@ -35,22 +34,10 @@ func csvToRecord(reader csv.Reader) []models.Record {
 		if len(header) == 0 {
 			header = row
 		} else {
-			id, err := strconv.Atoi(row[0])
-			if err != nil {
-				log.Fatal(err)
-			}
-			playID, err := strconv.Atoi(row[1])
-			if err != nil {
-				log.Fatal(err)
-			}
-			nflPlayID, err := strconv.Atoi(row[2])
-			if err != nil {
-				log.Fatal(err)
-			}
 			records = append(records, models.Record{
-				ID:           id,
-				PlayID:       playID,
-				NFLPlayerID:  nflPlayID,
+				ID:           row[0],
+				PlayID:       row[1],
+				NFLPlayerID:  row[2],
 				Type:         row[3],
 				GamePosition: row[4],
 				Team:         row[5],

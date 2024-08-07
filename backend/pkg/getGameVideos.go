@@ -2,27 +2,30 @@ package pkg
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"path/filepath"
 
 	"github.com/julienschmidt/httprouter"
 )
 
-func GetVideosHandler() httprouter.Handle {
+func GetGameVideosHandler() httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		query := r.URL.Query()
-		gameID := query.Get("game")
+		gameID := ps.ByName("gameId")
+		formattedGameID := fmt.Sprintf("%06s", gameID)
 
-		pattern := filepath.Join("../public/alpha/nfl_videos", "0"+gameID+"_*_0001_000_15000.mp4")
+		glob := formattedGameID + "_*_0001_000_*.mp4"
+
+		var videos []string
+		pattern := filepath.Join("../public/alpha/nfl_videos", glob)
 		files, err := filepath.Glob(pattern)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-
-		var videos []string
 		for _, file := range files {
-			videos = append(videos, filepath.Base(file))
+			filename := filepath.Base(file)
+			videos = append(videos, filename)
 		}
 
 		w.Header().Set("Content-Type", "application/json")
