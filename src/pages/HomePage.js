@@ -81,6 +81,18 @@ function HomePage() {
     }
   };
 
+  const handleSearchClick = async (keyword) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/injuries?search=${keyword}`
+      );
+      const data = await response.json();
+      setInjuries(data);
+    } catch (error) {
+      console.error("Error fetching injuries:", error);
+    }
+  };
+
   return (
     <div className={`${styles.container} min-h-screen flex flex-col`}>
       <Header></Header>
@@ -111,9 +123,15 @@ function HomePage() {
                 type="text"
                 placeholder="Search..."
                 className="flex-grow p-2 border border-gray-300 rounded-l"
+                id="input"
               />
               <button className="bg-blue-500 text-white p-2 rounded-r">
-                <FaSearch className="w-6 h-6" />
+                <FaSearch
+                  className="w-6 h-6"
+                  onClick={() =>
+                    handleSearchClick(document.getElementById("input").value)
+                  }
+                />
               </button>
             </div>
             <div className="flex gap-2 flex-row items-center mb-4">
