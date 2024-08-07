@@ -18,13 +18,12 @@ func GetDisplayInfoHandler(db *sql.DB) httprouter.Handle {
 		var injuries []models.InjuryDisplay
 		var err error
 
-		switch {
-		case search != "":
+		if search != "" {
 			tag = ""
 			injuries, err = database.ConcurrentSearch(db, search)
-		case tag != "":
+		} else if tag != "" {
 			injuries, err = database.GetInjuriesByType(db, tag)
-		default:
+		} else {
 			injuries, err = database.GetInjuryInfo(db)
 		}
 		if err != nil {
