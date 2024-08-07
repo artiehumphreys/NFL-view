@@ -6,7 +6,6 @@ import (
 	"log"
 
 	"github.com/artiehumphreys/NFL-view/models"
-	"github.com/artiehumphreys/NFL-view/pkg"
 )
 
 func GetField(db *sql.DB, field string) ([]string, error) {
@@ -62,21 +61,14 @@ func GetGamesList(db *sql.DB) (map[string][]models.InjuryDisplay, error) {
 	}
 	defer rows.Close()
 
-	count := 1
-	var prevGame = ""
 	results := make(map[string][]models.InjuryDisplay)
 	for rows.Next() {
 		var instance models.InjuryDisplay
 		if err := rows.Scan(&instance.Game, &instance.PlayID, &instance.Type, &instance.GamePosition, &instance.Team, &instance.JerseyNumber, &instance.FirstName, &instance.LastName); err != nil {
 			return nil, err
 		}
-		if prevGame != instance.Game {
-			count = 1
-			prevGame = instance.Game
-		}
 
 		results[instance.Game] = append(results[instance.Game], instance)
-		count = pkg.FindAndReplace(results[instance.Game], &instance, count)
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
@@ -107,8 +99,6 @@ func RemoveInjury(db *sql.DB, injury models.InjuryDisplay) error {
 	return nil
 }
 func GetGameInfo(db *sql.DB, gameID string) ([]models.InjuryDisplay, error) {
-	count := 1
-
 	query := "SELECT game, play_id, type, game_position, team, jersey_number, first_name, last_name FROM injuries WHERE game = ?"
 	rows, err := db.Query(query, gameID)
 	if err != nil {
@@ -124,7 +114,6 @@ func GetGameInfo(db *sql.DB, gameID string) ([]models.InjuryDisplay, error) {
 			log.Printf("Error scanning row: %v", err)
 			return nil, err
 		}
-		count = pkg.FindAndReplace(results, &instance, count)
 		results = append(results, instance)
 	}
 

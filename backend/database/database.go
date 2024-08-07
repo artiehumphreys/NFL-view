@@ -38,13 +38,24 @@ func InitDB(filepath string) *sql.DB {
 	return db
 }
 
+func IsTablePopulated(db *sql.DB) bool {
+	var count int
+	query := "SELECT COUNT(*) FROM injuries"
+	err := db.QueryRow(query).Scan(&count)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return count > 0
+}
+
 func PopulateDB(db *sql.DB, records []models.Record) {
 	var i = 0
 	for {
 		if i == len(records) {
 			break
 		}
-		record := records[i]
+		record := &records[i]
+		findDuplicates(db, record)
 		preparedInsertRecord := `INSERT OR IGNORE INTO injuries (game, play_id, nfl_player_id, type, game_position, team, jersey_number, first_name, last_name, quality) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
 		statement, err := db.Prepare(preparedInsertRecord)
 		if err != nil {
@@ -58,7 +69,7 @@ func PopulateDB(db *sql.DB, records []models.Record) {
 	}
 }
 
-func findDuplicates(db *sql.DB, record models.Record) {
+func findDuplicates(db *sql.DB, record *models.Record) {
 	var existingCount int
 	query := "SELECT COUNT(*) FROM injuries WHERE game = ? AND play_id = ?"
 	err := db.QueryRow(query, record.ID, record.PlayID).Scan(&existingCount)
@@ -68,6 +79,8 @@ func findDuplicates(db *sql.DB, record models.Record) {
 
 	count := 1
 	originalPlayID := record.PlayID
+	fmt.Println(originalPlayID)
+
 	for existingCount > 0 {
 		record.PlayID = fmt.Sprintf("%s_%d", originalPlayID, count)
 		count++
