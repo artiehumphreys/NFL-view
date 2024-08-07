@@ -3,6 +3,7 @@ package models
 import "fmt"
 
 type InjuryDisplay struct {
+	ID           string
 	Game         string
 	Type         string
 	GamePosition string

@@ -31,7 +31,7 @@ func GetField(db *sql.DB, field string) ([]string, error) {
 }
 
 func GetInjuryInfo(db *sql.DB) ([]models.InjuryDisplay, error) {
-	var query = "SELECT game, play_id, type, game_position, team, jersey_number, first_name, last_name FROM injuries"
+	var query = "SELECT id, game, play_id, type, game_position, team, jersey_number, first_name, last_name FROM injuries"
 	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err
@@ -41,7 +41,7 @@ func GetInjuryInfo(db *sql.DB) ([]models.InjuryDisplay, error) {
 	var results []models.InjuryDisplay
 	for rows.Next() {
 		var instance models.InjuryDisplay
-		if err := rows.Scan(&instance.Game, &instance.PlayID, &instance.Type, &instance.GamePosition, &instance.Team, &instance.JerseyNumber, &instance.FirstName, &instance.LastName); err != nil {
+		if err := rows.Scan(&instance.ID, &instance.Game, &instance.PlayID, &instance.Type, &instance.GamePosition, &instance.Team, &instance.JerseyNumber, &instance.FirstName, &instance.LastName); err != nil {
 			return nil, err
 		}
 		results = append(results, instance)
@@ -54,7 +54,7 @@ func GetInjuryInfo(db *sql.DB) ([]models.InjuryDisplay, error) {
 }
 
 func GetGamesList(db *sql.DB) (map[string][]models.InjuryDisplay, error) {
-	var query = "SELECT game, play_id, type, game_position, team, jersey_number, first_name, last_name FROM injuries"
+	var query = "SELECT id, game, play_id, type, game_position, team, jersey_number, first_name, last_name FROM injuries"
 	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err
@@ -64,7 +64,7 @@ func GetGamesList(db *sql.DB) (map[string][]models.InjuryDisplay, error) {
 	results := make(map[string][]models.InjuryDisplay)
 	for rows.Next() {
 		var instance models.InjuryDisplay
-		if err := rows.Scan(&instance.Game, &instance.PlayID, &instance.Type, &instance.GamePosition, &instance.Team, &instance.JerseyNumber, &instance.FirstName, &instance.LastName); err != nil {
+		if err := rows.Scan(&instance.ID, &instance.Game, &instance.PlayID, &instance.Type, &instance.GamePosition, &instance.Team, &instance.JerseyNumber, &instance.FirstName, &instance.LastName); err != nil {
 			return nil, err
 		}
 		results[instance.Game] = append(results[instance.Game], instance)
@@ -110,7 +110,7 @@ func GetGameInfo(db *sql.DB, gameID string) ([]models.InjuryDisplay, error) {
 	var results []models.InjuryDisplay
 	for rows.Next() {
 		var instance models.InjuryDisplay
-		if err := rows.Scan(&instance.Game, &instance.PlayID, &instance.Type, &instance.GamePosition, &instance.Team, &instance.JerseyNumber, &instance.FirstName, &instance.LastName); err != nil {
+		if err := rows.Scan(&instance.ID, &instance.Game, &instance.PlayID, &instance.Type, &instance.GamePosition, &instance.Team, &instance.JerseyNumber, &instance.FirstName, &instance.LastName); err != nil {
 			log.Printf("Error scanning row: %v", err)
 			return nil, err
 		}
@@ -126,11 +126,11 @@ func GetGameInfo(db *sql.DB, gameID string) ([]models.InjuryDisplay, error) {
 }
 
 func GetPlayInfo(db *sql.DB, gameID string, playID string) (*models.InjuryDisplay, error) {
-	query := "SELECT game, play_id, type, game_position, team, jersey_number, first_name, last_name FROM injuries WHERE game = ? AND play_id = ?"
+	query := "SELECT id, game, play_id, type, game_position, team, jersey_number, first_name, last_name FROM injuries WHERE game = ? AND play_id = ?"
 	row := db.QueryRow(query, gameID, playID)
 
 	var instance models.InjuryDisplay
-	if err := row.Scan(&instance.Game, &instance.PlayID, &instance.Type, &instance.GamePosition, &instance.Team, &instance.JerseyNumber, &instance.FirstName, &instance.LastName); err != nil {
+	if err := row.Scan(&instance.ID, &instance.Game, &instance.PlayID, &instance.Type, &instance.GamePosition, &instance.Team, &instance.JerseyNumber, &instance.FirstName, &instance.LastName); err != nil {
 		if err == sql.ErrNoRows {
 			log.Printf("No data found for gameID: %s, playID: %s", gameID, playID)
 			return nil, nil
@@ -140,32 +140,4 @@ func GetPlayInfo(db *sql.DB, gameID string, playID string) (*models.InjuryDispla
 	}
 
 	return &instance, nil
-}
-
-func GetInjuriesByType(db *sql.DB, tag string) ([]models.InjuryDisplay, error) {
-	query := "SELECT game, play_id, type, game_position, team, jersey_number, first_name, last_name FROM injuries WHERE type = ?"
-	rows, err := db.Query(query, tag)
-	if err != nil {
-		log.Printf("Error querying database: %v", err)
-		return nil, err
-	}
-	defer rows.Close()
-
-	var results []models.InjuryDisplay
-	for rows.Next() {
-		var instance models.InjuryDisplay
-		if err := rows.Scan(&instance.Game, &instance.PlayID, &instance.Type, &instance.GamePosition, &instance.Team, &instance.JerseyNumber, &instance.FirstName, &instance.LastName); err != nil {
-			log.Printf("Error scanning row: %v", err)
-			return nil, err
-		}
-		results = append(results, instance)
-	}
-
-	if err := rows.Err(); err != nil {
-		log.Printf("Row iteration error: %v", err)
-		return nil, err
-	}
-
-	return results, nil
-
 }

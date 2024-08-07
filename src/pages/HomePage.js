@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useNavigation } from "../contexts/NavigationContext.js";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { FaSearch, FaTrash } from "react-icons/fa";
+import { FaSearch, FaTrash, FaEdit } from "react-icons/fa";
 import styles from "../css/HomePage.module.css";
 import Header from "../components/Header.js";
 import Footer from "../components/Footer.js";
-import Modal from "../components/Modal.js";
+import DeleteModal from "../components/DeleteModal.js";
+import EditInsertModal from "../components/EditInsertModal";
 import Success from "../components/Success.js";
 import SideBar from "../components/SideBar.js";
 import MenuBar from "../components/MenuBar.js";
@@ -20,11 +21,16 @@ function HomePage() {
     push(location.pathname);
   }, [location.pathname, push]);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isEditInsertModalOpen, setIsEditInsertModalOpen] = useState(false);
   const [currentEvent, setCurrentEvent] = useState(null);
 
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
+  const toggleDeleteModal = () => {
+    setIsDeleteModalOpen(!isDeleteModalOpen);
+  };
+
+  const toggleEditInsertModal = () => {
+    setIsEditInsertModalOpen(!isEditInsertModalOpen);
   };
 
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
@@ -66,7 +72,7 @@ function HomePage() {
       localStorage.setItem("deleteSuccess", "true");
       window.location.reload();
     } else {
-      console.error(`Failed to remove item ${response.url}`);
+      console.error(`Failed to remove item: ${response.statusText}`);
     }
   };
 
@@ -94,12 +100,72 @@ function HomePage() {
     }
   };
 
+  const createInjury = async (data) => {
+    const url = `http://localhost:8080/injuries`;
+
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    };
+
+    try {
+      const response = await fetch(url, options);
+      if (response.ok) {
+        localStorage.setItem("insertSuccess", "true");
+        //window.location.reload();
+      } else {
+        console.error(`Failed to create item: ${response.statusText}`);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const editInjury = async (data) => {
+    const url = `http://localhost:8080/injuries/${data.ID}`;
+
+    const options = {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    };
+
+    console.log(data);
+
+    try {
+      const response = await fetch(url, options);
+      if (response.ok) {
+        localStorage.setItem("editSuccess", "true");
+        //window.location.reload();
+      } else {
+        console.error(`Failed to update item: ${response.statusText}`);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const handleSave = async (data) => {
+    console.log(data);
+    if (data.ID) {
+      await editInjury(data);
+    } else {
+      await createInjury(data);
+    }
+    window.location.reload();
+  };
+
   return (
     <div className={`${styles.container} min-h-screen flex flex-col`}>
       <Header></Header>
-      <Modal
-        isOpen={isModalOpen}
-        onClose={toggleModal}
+      <DeleteModal
+        isOpen={isDeleteModalOpen}
+        onClose={toggleDeleteModal}
         onDelete={() =>
           deleteInjury(
             currentEvent.PlayID,
@@ -110,9 +176,15 @@ function HomePage() {
           )
         }
       />
+      <EditInsertModal
+        isOpen={isEditInsertModalOpen}
+        onClose={toggleEditInsertModal}
+        onSave={handleSave}
+        initialData={currentEvent}
+      />
       <Success
         isOpen={isSuccessOpen}
-        onChange={toggleModal}
+        onChange={toggleDeleteModal}
         message="Entry successfully removed."
       ></Success>
       <div className="flex flex-1 relative overflow-hidden">
@@ -164,12 +236,20 @@ function HomePage() {
                     {info.GamePosition} {info.Team} #{info.JerseyNumber} -{" "}
                     {info.Type}
                   </div>
-                  <FaTrash
-                    className="ml-2 cursor-pointer"
+                  <FaEdit
+                    className="mr-2 cursor-pointer"
                     onClick={(e) => {
                       e.stopPropagation();
                       setCurrentEvent(info);
-                      toggleModal();
+                      toggleEditInsertModal();
+                    }}
+                  ></FaEdit>
+                  <FaTrash
+                    className=" cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setCurrentEvent(info);
+                      toggleDeleteModal();
                     }}
                   />
                 </button>

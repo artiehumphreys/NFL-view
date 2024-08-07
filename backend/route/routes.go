@@ -17,4 +17,6 @@ func RegisterRoutes(router *httprouter.Router, db *sql.DB) {
 	router.GET("/games/:gameId/plays/:playId", api.GetPlayInfoHandler(db))
 	router.GET("/games/:gameId/plays/:playId/videos", pkg.GetPlayVideosHandler())
 	router.DELETE("/injuries", api.RemoveInjuryHandler(db))
+	router.PUT("/injuries/:id", api.EditInjuryHandler(db))
+	router.POST("/injuries", api.CreateInjuryHandler(db))
 }
