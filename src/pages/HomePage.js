@@ -7,6 +7,7 @@ import styles from "../css/HomePage.module.css";
 import Header from "../components/Header.js";
 import Footer from "../components/Footer.js";
 import DeleteModal from "../components/DeleteModal.js";
+import EditInsertModal from "../components/EditInsertModal";
 import Success from "../components/Success.js";
 import SideBar from "../components/SideBar.js";
 import MenuBar from "../components/MenuBar.js";
@@ -21,7 +22,7 @@ function HomePage() {
   }, [location.pathname, push]);
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isEditInsertModalOpen, setIsEditInsertModalOpen] = useState(false);
   const [currentEvent, setCurrentEvent] = useState(null);
 
   const toggleDeleteModal = () => {
@@ -29,7 +30,7 @@ function HomePage() {
   };
 
   const toggleEditInsertModal = () => {
-    setIsEditModalOpen(!isEditModalOpen);
+    setIsEditInsertModalOpen(!isEditInsertModalOpen);
   };
 
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
@@ -60,13 +61,6 @@ function HomePage() {
     }
   });
 
-  useEffect(() => {
-    if (localStorage.getItem("insertEditSuccess") === "true") {
-      toggleSuccess();
-      localStorage.removeItem("insertEditSuccess");
-    }
-  });
-
   const deleteInjury = async (play_id, game, fName, lName, type) => {
     const response = await fetch(
       `http://localhost:8080/injuries?game=${game}&play_id=${play_id}&fName=${fName}&lName=${lName}&type=${type}`,
@@ -78,57 +72,7 @@ function HomePage() {
       localStorage.setItem("deleteSuccess", "true");
       window.location.reload();
     } else {
-      console.error(`Failed to remove item ${response.url}`);
-    }
-  };
-
-  const editInsertInjury = async (data) => {
-    const {
-      ID,
-      PlayID,
-      NFLPlayerID,
-      Type,
-      GamePosition,
-      Team,
-      JerseyNumber,
-      FirstName,
-      LastName,
-      Quality,
-    } = data;
-
-    const url = `http://localhost:8080/injuries`;
-
-    const options = {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        ID,
-        PlayID,
-        NFLPlayerID,
-        Type,
-        GamePosition,
-        Team,
-        JerseyNumber,
-        FirstName,
-        LastName,
-        Quality,
-      }),
-    };
-
-    try {
-      const response = await fetch(url, options);
-      if (response.ok) {
-        localStorage.setItem("insertEditSuccess", "true");
-        window.location.reload();
-      } else {
-        console.error(
-          `Failed to create or update item: ${response.statusText}`
-        );
-      }
-    } catch (error) {
-      console.error("Error:", error);
+      console.error(`Failed to remove item: ${response.statusText}`);
     }
   };
 
@@ -156,6 +100,66 @@ function HomePage() {
     }
   };
 
+  const createInjury = async (data) => {
+    const url = `http://localhost:8080/injuries`;
+
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    };
+
+    try {
+      const response = await fetch(url, options);
+      if (response.ok) {
+        localStorage.setItem("insertSuccess", "true");
+        //window.location.reload();
+      } else {
+        console.error(`Failed to create item: ${response.statusText}`);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const editInjury = async (data) => {
+    const url = `http://localhost:8080/injuries/${data.ID}`;
+
+    const options = {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    };
+
+    console.log(data);
+
+    try {
+      const response = await fetch(url, options);
+      if (response.ok) {
+        localStorage.setItem("editSuccess", "true");
+        //window.location.reload();
+      } else {
+        console.error(`Failed to update item: ${response.statusText}`);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const handleSave = async (data) => {
+    console.log(data);
+    if (data.ID) {
+      await editInjury(data);
+    } else {
+      await createInjury(data);
+    }
+    window.location.reload();
+  };
+
   return (
     <div className={`${styles.container} min-h-screen flex flex-col`}>
       <Header></Header>
@@ -175,18 +179,13 @@ function HomePage() {
       <EditInsertModal
         isOpen={isEditInsertModalOpen}
         onClose={toggleEditInsertModal}
-        onSave={editInsertInjury}
+        onSave={handleSave}
         initialData={currentEvent}
       />
       <Success
         isOpen={isSuccessOpen}
         onChange={toggleDeleteModal}
         message="Entry successfully removed."
-      ></Success>
-      <Success
-        isOpen={isSuccessOpen}
-        onChange={toggleEditInsertModal}
-        message="Entry successfully added."
       ></Success>
       <div className="flex flex-1 relative overflow-hidden">
         <SideBar></SideBar>

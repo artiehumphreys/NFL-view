@@ -30,6 +30,7 @@ function EditInsertModal({ isOpen, onClose, onSave, initialData = {} }) {
   };
 
   const handleSubmit = () => {
+    console.log(formData);
     onSave(formData);
   };
 
@@ -58,20 +59,23 @@ function EditInsertModal({ isOpen, onClose, onSave, initialData = {} }) {
             </button>
           </div>
           <div className="p-4 md:p-5 space-y-4">
-            {Object.keys(formData).map((key) => (
-              <div key={key}>
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                  {key}
-                </label>
-                <input
-                  type="text"
-                  name={key}
-                  value={formData[key]}
-                  onChange={handleChange}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                />
-              </div>
-            ))}
+            {Object.keys(formData).map(
+              (key) =>
+                key !== "ID" && (
+                  <div key={key}>
+                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                      {key}
+                    </label>
+                    <input
+                      type="text"
+                      name={key}
+                      value={formData[key]}
+                      onChange={handleChange}
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                    />
+                  </div>
+                )
+            )}
           </div>
           <div className="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
             <button

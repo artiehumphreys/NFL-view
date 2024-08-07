@@ -71,7 +71,7 @@ func ConcurrentSearch(db *sql.DB, keyword string) ([]models.InjuryDisplay, error
 }
 
 func GetInjuriesByType(db *sql.DB, tag string) ([]models.InjuryDisplay, error) {
-	query := "SELECT game, play_id, type, game_position, team, jersey_number, first_name, last_name FROM injuries WHERE type = ?"
+	query := "SELECT id, game, play_id, type, game_position, team, jersey_number, first_name, last_name FROM injuries WHERE type = ?"
 	rows, err := db.Query(query, tag)
 	if err != nil {
 		log.Printf("Error querying database: %v", err)
@@ -82,7 +82,7 @@ func GetInjuriesByType(db *sql.DB, tag string) ([]models.InjuryDisplay, error) {
 	var results []models.InjuryDisplay
 	for rows.Next() {
 		var instance models.InjuryDisplay
-		if err := rows.Scan(&instance.Game, &instance.PlayID, &instance.Type, &instance.GamePosition, &instance.Team, &instance.JerseyNumber, &instance.FirstName, &instance.LastName); err != nil {
+		if err := rows.Scan(&instance.ID, &instance.Game, &instance.PlayID, &instance.Type, &instance.GamePosition, &instance.Team, &instance.JerseyNumber, &instance.FirstName, &instance.LastName); err != nil {
 			log.Printf("Error scanning row: %v", err)
 			return nil, err
 		}
