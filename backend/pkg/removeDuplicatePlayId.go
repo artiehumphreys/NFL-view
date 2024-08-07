@@ -13,12 +13,12 @@ func FindAndReplace(list []models.InjuryDisplay, instance *models.InjuryDisplay,
 	}
 
 	for i := range list {
-		if list[i].PlayID == instance.PlayID {
+		if list[i].PlayID == instance.PlayID && list[i].Game == instance.Game {
+			replace(&list[i])
+			count++
 			if count == 1 {
 				replace(instance)
 			}
-			count++
-			replace(&list[i])
 		}
 	}
 	return count
