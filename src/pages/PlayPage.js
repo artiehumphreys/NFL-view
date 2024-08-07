@@ -29,7 +29,7 @@ function PlayPage() {
   return (
     <div className="max-h-screen flex h-screen flex-col">
       <Header></Header>
-      <div className="flex flex-1 relative justify-center pt-4 overflow-auto mb-4">
+      <div className="flex flex-1 relative justify-center pt-4 overflow-x-hidden mb-4">
         <SideBar></SideBar>
         <div className="w-full max-w-4xl">
           <h1 className="text-center font-medium text-4xl mb-6">
@@ -42,11 +42,11 @@ function PlayPage() {
             Play {play_id}
           </h1>
           <div></div>
-          <div>
+          <div className="flex flex-row m-2">
             {(videos[0] && (
               <video
                 controls
-                className="w-1/2"
+                className="w-1/2 mr-1"
                 src={`${process.env.PUBLIC_URL}/alpha/nfl_videos/${videos[0]}`}
               ></video>
             )) || <p className="flex items-center">Failed to Load Video.</p>}

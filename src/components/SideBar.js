@@ -19,7 +19,7 @@ function SideBar() {
   }, []);
 
   return (
-    <aside className="w-64 bg-gray-100 px-3 py-4 absolute left-0 top-0 bottom-0 flex flex-col flex-1">
+    <aside className="w-64 bg-gray-100 px-3 py-4 absolute left-0 top-0 bottom-0 flex flex-col flex-1 z-50">
       <div className="flex-shrink-0 mb-4">
         <h2 className="text-2xl font-bold">Games</h2>
       </div>
