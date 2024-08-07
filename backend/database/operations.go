@@ -67,7 +67,6 @@ func GetGamesList(db *sql.DB) (map[string][]models.InjuryDisplay, error) {
 		if err := rows.Scan(&instance.Game, &instance.PlayID, &instance.Type, &instance.GamePosition, &instance.Team, &instance.JerseyNumber, &instance.FirstName, &instance.LastName); err != nil {
 			return nil, err
 		}
-
 		results[instance.Game] = append(results[instance.Game], instance)
 	}
 	if err := rows.Err(); err != nil {
@@ -98,6 +97,7 @@ func RemoveInjury(db *sql.DB, injury models.InjuryDisplay) error {
 	}
 	return nil
 }
+
 func GetGameInfo(db *sql.DB, gameID string) ([]models.InjuryDisplay, error) {
 	query := "SELECT game, play_id, type, game_position, team, jersey_number, first_name, last_name FROM injuries WHERE game = ?"
 	rows, err := db.Query(query, gameID)
@@ -123,4 +123,21 @@ func GetGameInfo(db *sql.DB, gameID string) ([]models.InjuryDisplay, error) {
 	}
 
 	return results, nil
+}
+
+func GetPlayInfo(db *sql.DB, gameID string, playID string) (*models.InjuryDisplay, error) {
+	query := "SELECT game, play_id, type, game_position, team, jersey_number, first_name, last_name FROM injuries WHERE game = ? AND play_id = ?"
+	row := db.QueryRow(query, gameID, playID)
+
+	var instance models.InjuryDisplay
+	if err := row.Scan(&instance.Game, &instance.PlayID, &instance.Type, &instance.GamePosition, &instance.Team, &instance.JerseyNumber, &instance.FirstName, &instance.LastName); err != nil {
+		if err == sql.ErrNoRows {
+			log.Printf("No data found for gameID: %s, playID: %s", gameID, playID)
+			return nil, nil
+		}
+		log.Printf("Error scanning row: %v", err)
+		return nil, err
+	}
+
+	return &instance, nil
 }

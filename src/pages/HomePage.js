@@ -52,11 +52,11 @@ function HomePage() {
       toggleSuccess();
       localStorage.removeItem("deleteSuccess");
     }
-  }, []);
+  });
 
   const deleteInjury = async (play_id, game, fName, lName, type) => {
     const response = await fetch(
-      `http://localhost:8080/removeInjury?game=${game}&play_id=${play_id}&fName=${fName}&lName=${lName}&type=${type}`,
+      `http://localhost:8080/injuries?game=${game}&play_id=${play_id}&fName=${fName}&lName=${lName}&type=${type}`,
       {
         method: "DELETE",
       }

@@ -12,14 +12,21 @@ function PlayPage() {
   const { push } = useNavigation();
   const location = useLocation();
   const [videos, setVideos] = useState([]);
+  const [injury, setInjury] = useState([]);
 
   useEffect(() => {
     fetch(`http://localhost:8080/games/${game_id}/plays/${play_id}/videos`)
       .then((response) => response.json())
       .then((data) => {
         data = data || [];
-        console.log(data);
         setVideos(data);
+      });
+
+    fetch(`http://localhost:8080/games/${game_id}/plays/${play_id}`)
+      .then((response) => response.json())
+      .then((data) => {
+        data = data || [];
+        setInjury(data);
       });
   }, [game_id, play_id]);
 
@@ -42,6 +49,25 @@ function PlayPage() {
             Play {play_id}
           </h1>
           <div></div>
+          <div className="flex flex-row m-2">
+            <ul className="list-disc pl-5 mt-2">
+              <li>
+                <strong>Name:</strong> {injury.FirstName} {injury.LastName}
+              </li>
+              <li>
+                <strong>Type:</strong> {injury.Type}
+              </li>
+              <li>
+                <strong>Position:</strong> {injury.GamePosition}
+              </li>
+              <li>
+                <strong>Team:</strong> {injury.Team}
+              </li>
+              <li>
+                <strong>Jersey Number:</strong> {injury.JerseyNumber}
+              </li>
+            </ul>
+          </div>
           <div className="flex flex-row m-2">
             {(videos[0] && (
               <video
