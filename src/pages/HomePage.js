@@ -69,6 +69,16 @@ function HomePage() {
     }
   };
 
+  const handleTagClick = async (tag) => {
+    try {
+      const response = await fetch(`http://localhost:8080/injuries?tag=${tag}`);
+      const data = await response.json();
+      setInjuries(data);
+    } catch (error) {
+      console.error("Error fetching injuries:", error);
+    }
+  };
+
   return (
     <div className={`${styles.container} min-h-screen flex flex-col`}>
       <Header></Header>
@@ -110,6 +120,7 @@ function HomePage() {
                 <button
                   key={index}
                   className="bg-gray-200 text-gray-700 py-1 px-3 rounded hover:bg-gray-300"
+                  onClick={() => handleTagClick(tag)}
                 >
                   {tag}
                 </button>
