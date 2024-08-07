@@ -19,7 +19,6 @@ func GetDisplayInfoHandler(db *sql.DB) httprouter.Handle {
 		var err error
 
 		if search != "" {
-			tag = ""
 			injuries, err = database.ConcurrentSearch(db, search)
 		} else if tag != "" {
 			injuries, err = database.GetInjuriesByType(db, tag)
