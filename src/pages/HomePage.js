@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigation } from "../contexts/NavigationContext.js";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { FaSearch, FaTrash } from "react-icons/fa";
+import { FaSearch, FaTrash, FaEdit } from "react-icons/fa";
 import styles from "../css/HomePage.module.css";
 import Header from "../components/Header.js";
 import Footer from "../components/Footer.js";
@@ -164,8 +164,14 @@ function HomePage() {
                     {info.GamePosition} {info.Team} #{info.JerseyNumber} -{" "}
                     {info.Type}
                   </div>
+                  <FaEdit
+                    className="mr-2 cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                  ></FaEdit>
                   <FaTrash
-                    className="ml-2 cursor-pointer"
+                    className=" cursor-pointer"
                     onClick={(e) => {
                       e.stopPropagation();
                       setCurrentEvent(info);

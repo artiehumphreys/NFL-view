@@ -1,4 +1,4 @@
-import { IoMdArrowRoundBack } from "react-icons/io";
+import { IoMdArrowRoundBack, IoMdHome } from "react-icons/io";
 import { useNavigation } from "../contexts/NavigationContext.js";
 import { useNavigate } from "react-router-dom";
 
@@ -12,13 +12,18 @@ function Header() {
         className="ml-2 cursor-pointer"
         onClick={goBack}
       ></IoMdArrowRoundBack>
+      <IoMdHome
+        size={40}
+        className="ml-2 cursor-pointer"
+        onClick={() => navigate("/home")}
+      ></IoMdHome>
       <h1
         className="text-5xl font-bold flex-grow text-center cursor-pointer"
         onClick={() => navigate("/home")}
       >
         NFL View
       </h1>
-      <div className="w-10"></div>
+      <div className="w-24"></div>
     </header>
   );
 }
