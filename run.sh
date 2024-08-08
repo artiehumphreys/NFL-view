@@ -15,6 +15,7 @@ kill_process_on_port 8080
 kill_process_on_port 3000
 
 cd backend
+go install github.com/air-verse/air@latest
 air &
 
 GO_PID=$!
