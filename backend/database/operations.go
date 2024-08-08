@@ -99,7 +99,7 @@ func RemoveInjury(db *sql.DB, injury models.InjuryDisplay) error {
 }
 
 func GetGameInfo(db *sql.DB, gameID string) ([]models.InjuryDisplay, error) {
-	query := "SELECT game, play_id, type, game_position, team, jersey_number, first_name, last_name FROM injuries WHERE game = ?"
+	query := "SELECT id, game, play_id, type, game_position, team, jersey_number, first_name, last_name FROM injuries WHERE game = ?"
 	rows, err := db.Query(query, gameID)
 	if err != nil {
 		log.Printf("Error querying database: %v", err)
