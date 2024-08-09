@@ -201,7 +201,7 @@ class bvh_to_glb:
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 3:
+    if len(sys.argv) < 2:
         print("Not enough arguments provided.")
         sys.exit(2)
 
@@ -214,7 +214,7 @@ if __name__ == "__main__":
     )
     output_path = os.path.abspath("../public/alpha/final_files")
 
-    if not os.path.exists(f"{output_path}/{game_id}_{play_id}"):
+    if not os.path.exists(f"{output_path}/{game_id}_{play_id}.glb"):
         field_obj = (
             sys.argv[3]
             if len(sys.argv) > 3
