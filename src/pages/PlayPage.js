@@ -18,6 +18,7 @@ function PlayPage() {
   const [videos, setVideos] = useState([]);
   const [injury, setInjury] = useState([]);
   const [isConversionSuccessful, setIsConversionSuccessful] = useState(false);
+  const [sceneLoaded, setSceneLoaded] = useState(false);
   const sceneRef = useRef(null);
 
   useEffect(() => {
@@ -55,21 +56,29 @@ function PlayPage() {
   }, [location.pathname, push]);
 
   useEffect(() => {
-    if (isConversionSuccessful) {
+    if (isConversionSuccessful && sceneLoaded && sceneRef.current) {
       SceneLoader.ImportMesh(
         "",
         `${process.env.PUBLIC_URL}/alpha/final_files/`,
         `${game_id}_${play_id}.glb`,
         sceneRef.current,
-        function (meshes) {
+        function (meshes, particleSystems, skeletons, animationGroups) {
           meshes.forEach((mesh) => {
             mesh.scaling = new Vector3(1.5, 1.5, 1.5);
           });
+
+          // Play all animations
+          animationGroups.forEach((animationGroup) => {
+            animationGroup.start(true);
+          });
+        },
+        null,
+        function (scene, message, exception) {
+          console.error(`Failed to load model: ${message}`);
         }
       );
-      console.log("hi");
     }
-  }, [isConversionSuccessful, game_id, play_id]);
+  }, [isConversionSuccessful, sceneLoaded, game_id, play_id]);
 
   return (
     <div className="max-h-screen flex h-screen flex-col">
@@ -124,24 +133,29 @@ function PlayPage() {
           <div className="w-full mt-2">
             {isConversionSuccessful && (
               <Engine antialias adaptToDeviceRatio canvasId="babylon-canvas">
-                <Scene onSceneMounted={(scene) => (sceneRef.current = scene)}>
+                <Scene
+                  onSceneMount={({ scene }) => {
+                    sceneRef.current = scene;
+                    setSceneLoaded(true);
+                  }}
+                >
                   <arcRotateCamera
                     name="camera1"
-                    target={new Vector3(0, 0, 0)}
+                    target={new Vector3(-135, 1, 0)}
                     alpha={-Math.PI / 2}
                     beta={Math.PI / 2}
-                    radius={2}
+                    radius={5}
                   />
                   <hemisphericLight
                     name="light1"
                     intensity={0.7}
                     direction={new Vector3(0, 1, 0)}
                   />
-                  {/* <directionalLight
+                  <directionalLight
                     name="light2"
                     intensity={0.6}
                     direction={new Vector3(0, -1, 0)}
-                  /> */}
+                  />
                 </Scene>
               </Engine>
             )}
