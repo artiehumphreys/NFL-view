@@ -79,7 +79,6 @@ func findDuplicates(db *sql.DB, record *models.Record) {
 
 	count := 1
 	originalPlayID := record.PlayID
-	fmt.Println(originalPlayID)
 
 	for existingCount > 0 {
 		newPlayID := fmt.Sprintf("%s_%d", originalPlayID, count)

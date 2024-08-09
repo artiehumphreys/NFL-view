@@ -3,7 +3,6 @@ package api
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"github.com/artiehumphreys/NFL-view/database"
@@ -26,7 +25,6 @@ func GetDisplayInfoHandler(db *sql.DB) httprouter.Handle {
 		} else {
 			injuries, err = database.GetInjuryInfo(db)
 		}
-		fmt.Println(search, tag, err)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

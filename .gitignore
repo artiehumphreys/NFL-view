@@ -2,6 +2,7 @@
 alpha
 *.db
 tmp
+venv
 
 # dependencies
 /node_modules
