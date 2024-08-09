@@ -1,7 +1,7 @@
 bpy==4.1.0
 bvh==0.3
 bvhio==1.4.6
-certifi==2024.6.2
+certifi==2024.7.4
 charset-normalizer==3.3.2
 Cython==3.0.10
 dataclasses-json==0.6.7
