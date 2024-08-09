@@ -13,6 +13,7 @@ function PlayPage() {
   const location = useLocation();
   const [videos, setVideos] = useState([]);
   const [injury, setInjury] = useState([]);
+  const [isConversionSuccessful, setIsConversionSuccessful] = useState(false);
 
   useEffect(() => {
     fetch(`http://localhost:8080/games/${game_id}/plays/${play_id}/videos`)
@@ -28,6 +29,20 @@ function PlayPage() {
         data = data || [];
         setInjury(data);
       });
+
+    fetch(
+      `http://localhost:8080/games/${game_id}/plays/${play_id}/conversions`,
+      {
+        method: "POST",
+      }
+    ).then((response) => {
+      if (response.status === 204) {
+        setIsConversionSuccessful(true);
+      } else {
+        setIsConversionSuccessful(false);
+        console.error("Conversion failed or response is not 204.");
+      }
+    });
   }, [game_id, play_id]);
 
   useEffect(() => {
@@ -83,6 +98,13 @@ function PlayPage() {
                 src={`${process.env.PUBLIC_URL}/alpha/nfl_videos/${videos[1]}`}
               ></video>
             )) || <p className="flex items-center">Failed to Load Video.</p>}
+          </div>
+          <div className="w-full mt-2">
+            {isConversionSuccessful && (
+              <canvas
+                src={`${process.env.PUBLIC_URL}/alpha/final_files/${game_id}_${play_id}`}
+              ></canvas>
+            )}
           </div>
         </div>
         <MenuBar></MenuBar>

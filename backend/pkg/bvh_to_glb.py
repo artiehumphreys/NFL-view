@@ -194,16 +194,42 @@ class bvh_to_glb:
 
         bpy.ops.object.select_all(action="SELECT")
 
-        for team in self.teams.keys():
-            output_name += f"_{team}"
-
-        bpy.ops.export_scene.gltf(filepath=output_name, export_format="GLB")
+        bpy.ops.export_scene.gltf(
+            filepath=f"{self.output_path}/{sys.argv[1]}_{sys.argv[2]}",
+            export_format="GLB",
+        )
 
 
 if __name__ == "__main__":
-    converter = bvh_to_glb(
-        dir=sys.argv[1] if len(sys.argv) > 1 else "output_BVH",
-        output_path=sys.argv[2] if len(sys.argv) > 2 else "final_files",
-        field_obj=sys.argv[5] if len(sys.argv) > 3 else "",
+    print("in python")
+    if len(sys.argv) < 3:
+        print("Not enough arguments provided.")
+        sys.exit(2)
+
+    game_id = sys.argv[1]
+    play_id = sys.argv[2]
+    pad = play_id.rjust(6, "0")
+
+    bvh_dir = f"../public/alpha/reconstruction/{game_id}/{pad}/final_results/bvh"
+    output_path = sys.argv[2] if len(sys.argv) > 2 else "../public/alpha/final_files"
+    field_obj = (
+        sys.argv[3]
+        if len(sys.argv) > 3
+        else "../public/alpha/input_rendering/NFLstadium.obj"
     )
+
+    if not os.path.exists(bvh_dir):
+        print(f"BVH directory does not exist: {bvh_dir}")
+        sys.exit(2)
+
+    if not os.path.exists(output_path):
+        print(f"Output path does not exist: {output_path}")
+        sys.exit(2)
+
+    converter = bvh_to_glb(
+        dir=bvh_dir,
+        output_path=output_path,
+        field_obj=field_obj,
+    )
+
     converter.convert_bvh_to_glb(converter.output_path + "/Pose3D")
