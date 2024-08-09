@@ -167,7 +167,7 @@ class bvh_to_glb:
 
             bvh_path = os.path.join(self.dir, file)
             bpy.ops.import_anim.bvh(filepath=bvh_path)
-            bpy.context.scene.render.fps = 60
+            bpy.context.scene.render.fps = 20
 
             armature: bpy.types.Object = bpy.context.object
             if armature.type != "ARMATURE":
@@ -201,7 +201,6 @@ class bvh_to_glb:
 
 
 if __name__ == "__main__":
-    print("in python")
     if len(sys.argv) < 3:
         print("Not enough arguments provided.")
         sys.exit(2)
@@ -210,26 +209,29 @@ if __name__ == "__main__":
     play_id = sys.argv[2]
     pad = play_id.rjust(6, "0")
 
-    bvh_dir = f"../public/alpha/reconstruction/{game_id}/{pad}/final_results/bvh"
-    output_path = sys.argv[2] if len(sys.argv) > 2 else "../public/alpha/final_files"
-    field_obj = (
-        sys.argv[3]
-        if len(sys.argv) > 3
-        else "../public/alpha/input_rendering/NFLstadium.obj"
+    bvh_dir = os.path.abspath(
+        f"../public/alpha/reconstruction/{game_id}/{pad}/final_results/bvh"
     )
+    output_path = os.path.abspath("../public/alpha/final_files")
 
-    if not os.path.exists(bvh_dir):
-        print(f"BVH directory does not exist: {bvh_dir}")
-        sys.exit(2)
+    if not os.path.exists(f"{output_path}/{game_id}_{play_id}"):
+        field_obj = (
+            sys.argv[3]
+            if len(sys.argv) > 3
+            else os.path.abspath("../public/alpha/input_rendering/NFLstadium.obj")
+        )
 
-    if not os.path.exists(output_path):
-        print(f"Output path does not exist: {output_path}")
-        sys.exit(2)
+        if not os.path.exists(bvh_dir):
+            print(f"BVH directory does not exist: {bvh_dir}")
+            sys.exit(2)
 
-    converter = bvh_to_glb(
-        dir=bvh_dir,
-        output_path=output_path,
-        field_obj=field_obj,
-    )
+        if not os.path.exists(output_path):
+            os.mkdir(output_path)
 
-    converter.convert_bvh_to_glb(converter.output_path + "/Pose3D")
+        converter = bvh_to_glb(
+            dir=bvh_dir,
+            output_path=output_path,
+            field_obj=field_obj,
+        )
+
+        converter.convert_bvh_to_glb(converter.output_path + "/Pose3D")

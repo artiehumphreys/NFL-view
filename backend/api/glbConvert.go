@@ -22,19 +22,24 @@ func GLBConvert() httprouter.Handle {
 		scriptPath := filepath.Join(basePath, "pkg", "bvh_to_glb.py")
 		requirementsPath := filepath.Join(basePath, "requirements.txt")
 
-		exec.Command("python", "-m", "venv", "venv")
-		exec.Command("source", "venv/bin/activate")
-		cmd := exec.Command("python", "-m", "pip", "install", "-r", requirementsPath)
-		output, err := cmd.CombinedOutput()
+		pipInstallCmd := exec.Command("python", "-m", "pip", "install", "-r", requirementsPath)
+		output, err := pipInstallCmd.CombinedOutput()
 		if err != nil {
 			fmt.Printf("Failed to install Python libraries: %s\n%s", err.Error(), string(output))
+			http.Error(w, "Failed to install Python libraries: "+err.Error(), http.StatusInternalServerError)
+			return
 		}
 		fmt.Println("Python libraries installed successfully")
 
-		exec.Command("python", scriptPath, gameID, playID)
-		fmt.Println("hi")
-		cmd.Run()
-		fmt.Println("hio")
+		cmd := exec.Command("python", scriptPath, gameID, playID)
+		cmdOutput, err := cmd.CombinedOutput()
+		if err != nil {
+			fmt.Printf("Failed to execute Python script: %s\n%s", err.Error(), string(cmdOutput))
+			http.Error(w, "Failed to execute Python script: "+err.Error(), http.StatusInternalServerError)
+			return
+		}
+		fmt.Println("Python script executed successfully")
+		fmt.Println(string(cmdOutput))
 
 		w.WriteHeader(http.StatusNoContent)
 	}
