@@ -3,7 +3,6 @@ package api
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"github.com/artiehumphreys/NFL-view/models"
@@ -23,8 +22,6 @@ func EditInjuryHandler(db *sql.DB) httprouter.Handle {
 			http.Error(w, "Invalid request payload", http.StatusBadRequest)
 			return
 		}
-
-		fmt.Println(&injury)
 
 		query := `
 			UPDATE injuries 
